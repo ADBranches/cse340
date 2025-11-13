@@ -1,0 +1,36 @@
+
+<section class="vehicle-details" aria-labelledby="vehicle-name">
+  <header class="section-header">
+    <h2 id="vehicle-name">
+      Details for <%= vehicle %>
+    </h2>
+    <p>Explore specifications, features, and pricing.</p>
+  </header>
+
+  <div class="vehicle-details__layout">
+    <!-- IMAGE -->
+    <figure class="vehicle-details__image">
+      <img 
+        src="/images/<%= vehicle %>.svg"
+        alt="<%= vehicle %> vehicle image"
+        loading="lazy"
+      />
+    </figure>
+
+    <!-- RIGHT COLUMN -->
+    <div class="vehicle-details__info">
+      <h3>Model: <%= vehicle.toUpperCase() %></h3>
+      <p>
+        This <%= vehicle %> model offers exceptional performance,
+        modern interior comfort, and advanced safety features.
+      </p>
+      <ul>
+        <li>Smooth engine performance</li>
+        <li>High fuel efficiency</li>
+        <li>Premium comfort interior</li>
+        <li>Advanced safety suite</li>
+      </ul>
+      <a href="/inventory" class="btn-secondary">Back to Inventory</a>
+    </div>
+  </div>
+</section>

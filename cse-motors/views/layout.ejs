@@ -1,10 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
-  <%- include('partials/head') %>
+  <%- include("partials/head", { title }) %>
   <body>
-    <%- include('partials/header') %>
-    <%- include('partials/nav') %>
-    <main><%- body %></main>
-    <%- include('partials/footer') %>
+    <%- include("partials/header") %>
+    <%- include("partials/nav") %>
+
+    <main id="main-content">
+      <!-- Support both 'body' and 'view' variables for backward compatibility -->
+      <% if (typeof body !== 'undefined') { %>
+        <%- body %>
+      <% } else if (typeof view !== 'undefined') { %>
+        <%- include(view) %>
+      <% } else { %>
+        <p>Error: No content provided for this page.</p>
+      <% } %>
+    </main>
+
+    <%- include("partials/footer") %>
   </body>
 </html>

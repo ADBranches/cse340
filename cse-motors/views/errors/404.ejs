@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include("../partials/head", { title: "Page Not Found" }) %>
+  <body>
+    <%- include("../partials/header") %>
+    <%- include("../partials/nav") %>
+
+    <main class="error-page">
+      <h2>Page Not Found</h2>
+      <p>
+        Sorry, we couldn't find the page you requested.
+      </p>
+      <p>
+        <a href="/" class="btn btn-primary">Return to CSE Motors Home</a>
+      </p>
+    </main>
+
+    <%- include("../partials/footer", { year: new Date().getFullYear() }) %>
+  </body>
+</html>

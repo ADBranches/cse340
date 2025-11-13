@@ -1,41 +1,295 @@
-:root {
-  --primary: #004aad;
-  --accent: #ffb703;
-  --text: #222;
-  --bg: #f7f7f7;
-  font-family: 'Segoe UI', sans-serif;
+/* ----------------------------------------------------------
+   GLOBAL RESET & ACCESSIBILITY
+---------------------------------------------------------- */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  margin: 0;
-  background: var(--bg);
+  font-family: "Segoe UI", Arial, sans-serif;
+  background-color: var(--bg);
   color: var(--text);
+  line-height: 1.6;
 }
 
-header, nav, footer {
+/* Visually Hidden Utility (Accessibility) */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+/* ----------------------------------------------------------
+   COLOR SYSTEM (Accessible)
+---------------------------------------------------------- */
+:root {
+  --primary: #004aad;
+  --primary-dark: #00337a;
+
+  --secondary: #ffb703;
+  --secondary-dark: #d89202;
+
+  --bg: #f8f9fa;
+  --text: #1a1a1a;
+
+  --card-bg: #ffffff;
+  --border: #e2e2e2;
+}
+
+/* ----------------------------------------------------------
+   GLOBAL ELEMENTS
+---------------------------------------------------------- */
+img {
+  max-width: 100%;
+  display: block;
+}
+
+/* SVG OPTIMIZATION */
+img[src$=".svg"] {
+  height: auto;
+  width: 100%;
+  shape-rendering: geometricPrecision;
+  text-rendering: optimizeLegibility;
+  image-rendering: optimizeQuality;
+}
+
+
+a {
+  color: var(--primary);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+main {
+  padding: 1.5rem 1rem;
+}
+
+/* BUTTON SYSTEM */
+.btn-primary,
+.btn-secondary {
+  display: inline-block;
+  padding: 0.8rem 1.2rem;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
   text-align: center;
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--primary-dark);
+}
+
+.btn-secondary {
+  background: var(--secondary);
+  color: #000;
+}
+
+.btn-secondary:hover {
+  background: var(--secondary-dark);
+}
+
+/* ----------------------------------------------------------
+   HEADER
+---------------------------------------------------------- */
+.site-header {
+  background: var(--primary);
+  color: white;
+  padding: 1.5rem 1rem;
+  text-align: center;
+}
+
+.site-header__tagline {
+  opacity: 0.9;
+  font-size: 0.95rem;
+}
+
+/* ----------------------------------------------------------
+   NAVIGATION
+---------------------------------------------------------- */
+.site-nav {
+  background: white;
+  border-bottom: 1px solid var(--border);
+}
+
+.site-nav__list {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  padding: 1rem 0;
+}
+
+.site-nav__list a {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.site-nav__list a:hover {
+  color: var(--primary);
+}
+
+/* ----------------------------------------------------------
+   HERO SECTION (Mobile First)
+---------------------------------------------------------- */
+.hero {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  margin-bottom: 2rem;
+}
+
+.hero__inner {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.hero__text-block h2 {
+  font-size: 1.9rem;
+  margin-bottom: 0.5rem;
+}
+
+.hero__text-block p {
+  font-size: 1rem;
+  margin-bottom: 1rem;
+}
+
+.hero__actions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.hero__figure {
+  width: 100%;
+}
+
+/* ----------------------------------------------------------
+   FEATURED VEHICLES
+---------------------------------------------------------- */
+.featured {
+  margin: 3rem 0;
+}
+
+.section-header h3 {
+  margin-bottom: 0.3rem;
+  font-size: 1.6rem;
+}
+
+.section-header p {
+  margin-bottom: 1.2rem;
+  opacity: 0.8;
+}
+
+.featured__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.3rem;
+}
+
+.vehicle-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding-bottom: 1rem;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+
+}
+
+.vehicle-card__body {
   padding: 1rem;
 }
 
-nav ul {
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
-  list-style: none;
-  padding: 0;
+.vehicle-card__body h4 {
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
 }
 
-.hero img {
-  width: 100%;
-  height: auto;
+.vehicle-features {
+  margin: 0.8rem 0;
+  padding-left: 1.2rem;
 }
 
-.grid {
+/* ----------------------------------------------------------
+   CONTACT SECTION
+---------------------------------------------------------- */
+.contact {
+  margin-top: 3rem;
+}
+
+.contact__grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 1rem;
+  gap: 1.5rem;
 }
 
-@media (min-width: 768px) {
-  .grid { grid-template-columns: repeat(3, 1fr); }
+.contact article h4 {
+  margin-bottom: 0.5rem;
+  font-size: 1.2rem;
+}
+
+/* ----------------------------------------------------------
+   FOOTER
+---------------------------------------------------------- */
+.site-footer {
+  background: var(--primary);
+  color: white;
+  text-align: center;
+  padding: 1.5rem 1rem;
+  margin-top: 3rem;
+}
+
+/* ----------------------------------------------------------
+   RESPONSIVE BREAKPOINTS
+---------------------------------------------------------- */
+@media (min-width: 700px) {
+  .hero__inner {
+    flex-direction: row;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  .hero__text-block {
+    flex: 1;
+  }
+
+  .hero__figure {
+    flex: 1;
+  }
+
+  .featured__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .contact__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1000px) {
+  .featured__grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
