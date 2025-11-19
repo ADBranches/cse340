@@ -75,7 +75,7 @@ app.use((err, req, res, next) => {
 // ────────────────────────────────────────────────
 const PORT = process.env.PORT || 3000;
 
-app.listen(PORT, () => {
+app.listen(PORT, "0.0.0.0", () => {
   console.log(`🚗 CSE Motors server running at http://localhost:${PORT}`);
   if (process.env.NODE_ENV === "production") {
     console.log("✅ Environment: Production build");
