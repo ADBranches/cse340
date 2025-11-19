@@ -10,7 +10,7 @@
     <!-- IMAGE -->
     <figure class="vehicle-details__image">
       <img 
-        src="<%= vehicle.imageUrl || '/images/placeholder-car.svg' %>"
+        src="<%= vehicle.image || '/images/placeholder-car.svg' %>"
         alt="<%= vehicle.year %> <%= vehicle.make %> <%= vehicle.model %>"
         loading="lazy"
       />
@@ -36,6 +36,7 @@
         <%= vehicle.description %>
       </p>
 
+      <!-- You can later make these dynamic if needed -->
       <ul>
         <li>Smooth engine performance</li>
         <li>High fuel efficiency</li>

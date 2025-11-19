@@ -6,11 +6,17 @@ const router = express.Router();
 router.get("/", (req, res) => {
   res.render("layout", { 
     title: "Home",
-    view: "index-content"
+    bodyClass: "home",
+    view: "index-content",
+    featuredVehicles: vehicles.slice(0, 3)
   });
 });
 
 router.get("/inventory", (req, res) => {
+  console.log("🔥 /inventory route was called.");
+  console.log("🔥 Sending view: inventory");
+  console.log("🔥 Items count:", vehicles.length);
+
   res.render("layout", { 
     title: "Inventory",
     view: "inventory",
@@ -25,29 +31,22 @@ router.get("/contact", (req, res) => {
   });
 });
 
-router.get("/inventory/:vehicle", (req, res) => {
-  const vehicle = req.params.vehicle;
-  res.render("layout", { 
-    title: vehicle.toUpperCase(),
-    view: "vehicle-details",
-    vehicle
-  });
-});
-
-// Vehicle Detail View
 router.get("/inventory/detail/:id", (req, res) => {
   const id = parseInt(req.params.id);
   const vehicle = vehicles.find(v => v.id === id);
 
   if (!vehicle) {
-    return res.status(404).render("errors/404", { title: "Vehicle Not Found" });
+    return res.status(404).render("layout", { 
+      title: "Vehicle Not Found",
+      view: "errors/404"
+    });
   }
 
-  res.render("vehicle-details", {
-    title: `${vehicle.make} ${vehicle.model}`,
+  res.render("layout", {  
+    title: `${vehicle.year} ${vehicle.make} ${vehicle.model}`,
+    view: "vehicle-details",
     vehicle
   });
 });
-
 
 export default router;

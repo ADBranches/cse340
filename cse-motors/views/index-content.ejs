@@ -1,99 +1,101 @@
-<section class="hero" aria-labelledby="hero-title">
-  <div class="hero__inner">
-    <div class="hero__text-block">
-      <h2 id="hero-title">Premium Vehicles. Honest Service.</h2>
-      <p>
-        CSE Motors brings you premium sedans, SUVs, and performance vehicles — 
-        backed by integrity, transparency, and top-tier service.
-      </p>
+<div class="homepage">
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="hero__inner">
+      <div class="hero__text-block">
+        <h2 id="hero-title">Premium Vehicles. Honest Service.</h2>
+        <p>
+          CSE Motors brings you premium sedans, SUVs, and performance vehicles — 
+          backed by integrity, transparency, and top-tier service.
+        </p>
 
-      <div class="hero__actions">
-        <a href="/inventory" class="btn-primary">Explore Featured Vehicles</a>
-        <a href="/contact" class="btn-secondary">Contact Sales Team</a>
+        <div class="hero__actions">
+          <a href="#featured" class="btn-primary">Explore Featured Vehicles</a>
+          <a href="/contact" class="btn-secondary">Contact Sales Team</a>
+        </div>
       </div>
+
+      <figure class="hero__figure">
+        <img 
+          src="/images/hero-car.svg"
+          alt="Featured CSE Motors showcase vehicle"
+          loading="lazy"
+        />
+        <figcaption class="visually-hidden">
+          CSE Motors featured vehicle in showroom.
+        </figcaption>
+      </figure>
     </div>
+  </section>
 
-    <figure class="hero__figure">
-      <img 
-        src="/images/hero-car.svg"
-        alt="Featured CSE Motors showcase vehicle"
-        loading="lazy"
-      />
-      <figcaption class="visually-hidden">
-        CSE Motors featured vehicle in showroom.
-      </figcaption>
-    </figure>
-  </div>
-</section>
+  <section id="featured" class="featured" aria-labelledby="featured-title">
+    <header class="section-header">
+      <h3 id="featured-title">Featured Vehicles</h3>
+      <p>Our most popular selections, available immediately.</p>
+    </header>
 
-<section id="featured" class="featured" aria-labelledby="featured-title">
-  <header class="section-header">
-    <h3 id="featured-title">Featured Vehicles</h3>
-    <p>Our most popular selections, available immediately.</p>
-  </header>
+    <div class="featured__grid">
+      <!-- Vehicle Card 1 -->
+      <article class="vehicle-card">
+        <figure>
+          <img src="/images/car1.svg" alt="2025 Executive Sedan - White" loading="lazy" />
+          <figcaption class="visually-hidden">2025 Executive Sedan</figcaption>
+        </figure>
 
-  <div class="featured__grid">
-    <!-- Vehicle Card 1 -->
-    <article class="vehicle-card">
-      <figure>
-        <img src="/images/car1.svg" alt="2025 Executive Sedan - White" loading="lazy" />
-        <figcaption class="visually-hidden">2025 Executive Sedan</figcaption>
-      </figure>
+        <div class="vehicle-card__body">
+          <h4>2025 Executive Sedan</h4>
+          <p>
+            Experience smooth performance, hybrid efficiency, and a luxurious interior.
+          </p>
+          <ul class="vehicle-features">
+            <li>Hybrid Engine</li>
+            <li>Automatic Transmission</li>
+            <li>360° Safety Suite</li>
+          </ul>
+          <a href="/inventory/detail/1" class="btn-primary">View Details</a>
+        </div>
+      </article>
 
-      <div class="vehicle-card__body">
-        <h4>2025 Executive Sedan</h4>
-        <p>
-          Experience smooth performance, hybrid efficiency, and a luxurious interior.
-        </p>
-        <ul class="vehicle-features">
-          <li>Hybrid Engine</li>
-          <li>Automatic Transmission</li>
-          <li>360° Safety Suite</li>
-        </ul>
-        <a href="/inventory/sedan" class="btn-primary">View Details</a>
-      </div>
-    </article>
+      <!-- Vehicle Card 2 -->
+      <article class="vehicle-card">
+        <figure>
+          <img src="/images/car2.svg" alt="2025 Family SUV - Black" loading="lazy" />
+          <figcaption class="visually-hidden">2025 Family SUV</figcaption>
+        </figure>
 
-    <!-- Vehicle Card 2 -->
-    <article class="vehicle-card">
-      <figure>
-        <img src="/images/car2.svg" alt="2025 Family SUV - Black" loading="lazy" />
-        <figcaption class="visually-hidden">2025 Family SUV</figcaption>
-      </figure>
+        <div class="vehicle-card__body">
+          <h4>2025 Family SUV</h4>
+          <p>
+            Perfect for families — equipped with 7 seats, AWD, and modern safety systems.
+          </p>
+          <ul class="vehicle-features">
+            <li>All-wheel drive</li>
+            <li>7-seater capacity</li>
+            <li>Smart infotainment</li>
+          </ul>
+          <a href="/inventory/detail/2" class="btn-primary">View Details</a>
+        </div>
+      </article>
 
-      <div class="vehicle-card__body">
-        <h4>2025 Family SUV</h4>
-        <p>
-          Perfect for families — equipped with 7 seats, AWD, and modern safety systems.
-        </p>
-        <ul class="vehicle-features">
-          <li>All-wheel drive</li>
-          <li>7-seater capacity</li>
-          <li>Smart infotainment</li>
-        </ul>
-        <a href="/inventory/suv" class="btn-primary">View Details</a>
-      </div>
-    </article>
+      <!-- Vehicle Card 3 -->
+      <article class="vehicle-card">
+        <figure>
+          <img src="/images/car3.svg" alt="2025 Sport Coupe - Red" loading="lazy" />
+          <figcaption class="visually-hidden">2025 Sport Coupe</figcaption>
+        </figure>
 
-    <!-- Vehicle Card 3 -->
-    <article class="vehicle-card">
-      <figure>
-        <img src="/images/car3.svg" alt="2025 Sport Coupe - Red" loading="lazy" />
-        <figcaption class="visually-hidden">2025 Sport Coupe</figcaption>
-      </figure>
-
-      <div class="vehicle-card__body">
-        <h4>2025 Sport Coupe</h4>
-        <p>
-          Built for performance lovers — turbocharged engine and bold design.
-        </p>
-        <ul class="vehicle-features">
-          <li>Turbocharged engine</li>
-          <li>Sport suspension</li>
-          <li>Premium cabin</li>
-        </ul>
-        <a href="/inventory/coupe" class="btn-primary">View Details</a>
-      </div>
-    </article>
-  </div>
-</section>
+        <div class="vehicle-card__body">
+          <h4>2025 Sport Coupe</h4>
+          <p>
+            Built for performance lovers — turbocharged engine and bold design.
+          </p>
+          <ul class="vehicle-features">
+            <li>Turbocharged engine</li>
+            <li>Sport suspension</li>
+            <li>Premium cabin</li>
+          </ul>
+          <a href="/inventory/detail/3" class="btn-primary">View Details</a>
+        </div>
+      </article>
+    </div>
+  </section>
+</div>

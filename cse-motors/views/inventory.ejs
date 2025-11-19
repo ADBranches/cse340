@@ -5,23 +5,25 @@
   </header>
 
   <div class="featured__grid">
-    <% if (typeof items !== 'undefined' && items.length > 0) { %>
-      <% items.forEach(function(item) { %>
+    <% if (items && items.length > 0) { %>
+      <% items.forEach(vehicle => { %>
         <article class="vehicle-card">
           <figure>
-            <img src="<%= item.imageUrl || '/images/placeholder-car.svg' %>" alt="<%= item.make %> <%= item.model %>" loading="lazy" />
+            <img 
+              src="<%= vehicle.image || '/images/placeholder-car.svg' %>" 
+              alt="<%= vehicle.year %> <%= vehicle.make %> <%= vehicle.model %>" 
+              loading="lazy"
+            />
           </figure>
           <div class="vehicle-card__body">
-            <h4><%= item.year %> <%= item.make %> <%= item.model %></h4>
-            <p><%= item.description %></p>
-            <a href="/inventory/detail/<%= item.id %>" class="btn-primary">
-              View Details
-            </a>
+            <h4><%= vehicle.year %> <%= vehicle.make %> <%= vehicle.model %></h4>
+            <p><%= vehicle.description %></p>
+            <a href="/inventory/detail/<%= vehicle.id %>" class="btn-primary">View Details</a>
           </div>
         </article>
-      <% }); %>
+      <% }) %>
     <% } else { %>
-      <p>No vehicles available at the moment.</p>
+      <p>No vehicles currently available.</p>
     <% } %>
   </div>
 </section>
