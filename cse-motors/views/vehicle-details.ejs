@@ -7,6 +7,7 @@
   </header>
 
   <div class="vehicle-details__layout">
+
     <!-- IMAGE -->
     <figure class="vehicle-details__image">
       <img 
@@ -19,24 +20,23 @@
     <!-- RIGHT COLUMN -->
     <div class="vehicle-details__info">
       <h3><%= vehicle.year %> <%= vehicle.make %> <%= vehicle.model %></h3>
-      
+
+      <!-- ⭐ FORMATTED PRICE -->
       <% if (vehicle.price) { %>
-        <p><strong>Price:</strong> $<%= vehicle.price.toLocaleString() %></p>
+        <p><strong>Price:</strong> <%= utils.formatPrice(vehicle.price) %></p>
       <% } %>
-      
+
       <% if (vehicle.color) { %>
         <p><strong>Color:</strong> <%= vehicle.color %></p>
       <% } %>
-      
+
+      <!-- ⭐ FORMATTED MILES -->
       <% if (vehicle.miles) { %>
-        <p><strong>Mileage:</strong> <%= vehicle.miles.toLocaleString() %> miles</p>
+        <p><strong>Mileage:</strong> <%= utils.formatMiles(vehicle.miles) %></p>
       <% } %>
 
-      <p class="description">
-        <%= vehicle.description %>
-      </p>
+      <p class="description"><%= vehicle.description %></p>
 
-      <!-- You can later make these dynamic if needed -->
       <ul>
         <li>Smooth engine performance</li>
         <li>High fuel efficiency</li>

@@ -15,9 +15,18 @@
               loading="lazy"
             />
           </figure>
+
           <div class="vehicle-card__body">
             <h4><%= vehicle.year %> <%= vehicle.make %> <%= vehicle.model %></h4>
+
             <p><%= vehicle.description %></p>
+
+            <!-- ⭐ FORMATTED PRICE -->
+            <p><strong>Price:</strong> <%= utils.formatPrice(vehicle.price) %></p>
+
+            <!-- ⭐ FORMATTED MILES -->
+            <p><strong>Mileage:</strong> <%= utils.formatMiles(vehicle.miles) %></p>
+
             <a href="/inventory/detail/<%= vehicle.id %>" class="btn-primary">View Details</a>
           </div>
         </article>

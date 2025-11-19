@@ -1,51 +1,38 @@
 import express from "express";
+
 import { vehicles } from "../data/vehicles.js";
+import {
+  showInventory,
+  showVehicleDetail
+} from "../controllers/inventoryController.js";
+
+import { triggerError } from "../controllers/errorController.js";
 
 const router = express.Router();
 
+// HOME PAGE
 router.get("/", (req, res) => {
-  res.render("layout", { 
+  res.render("layout", {
     title: "Home",
-    bodyClass: "home",
     view: "index-content",
     featuredVehicles: vehicles.slice(0, 3)
   });
 });
 
-router.get("/inventory", (req, res) => {
-  console.log("🔥 /inventory route was called.");
-  console.log("🔥 Sending view: inventory");
-  console.log("🔥 Items count:", vehicles.length);
+// INVENTORY PAGE
+router.get("/inventory", showInventory);
 
-  res.render("layout", { 
-    title: "Inventory",
-    view: "inventory",
-    items: vehicles
-  });
-});
+// VEHICLE DETAIL PAGE
+router.get("/inventory/detail/:id", showVehicleDetail);
 
+// ERROR TEST ROUTE (Rubric requirement)
+router.get("/cause-error", triggerError);
+
+// CONTACT (no controller needed)
 router.get("/contact", (req, res) => {
-  res.render("layout", { 
+  res.render("layout", {
     title: "Contact",
     view: "contact"
-  });
-});
-
-router.get("/inventory/detail/:id", (req, res) => {
-  const id = parseInt(req.params.id);
-  const vehicle = vehicles.find(v => v.id === id);
-
-  if (!vehicle) {
-    return res.status(404).render("layout", { 
-      title: "Vehicle Not Found",
-      view: "errors/404"
-    });
-  }
-
-  res.render("layout", {  
-    title: `${vehicle.year} ${vehicle.make} ${vehicle.model}`,
-    view: "vehicle-details",
-    vehicle
   });
 });
 
