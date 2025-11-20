@@ -182,7 +182,7 @@ error trigger page
 
 ## 🙌 Author
 
-Developed by **Edwin Bwambale** for **BYU-Idaho – CSE340 (Web Backend Development)**
+Developed by **Edwin Kambale** for **BYU-Idaho – CSE340 (Web Backend Development)**
 
 ---
 
