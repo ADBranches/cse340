@@ -45,3 +45,82 @@ export function showVehicleDetail(req, res, next) {
     next(err); // forwards to error middleware
   }
 }
+export function buildManagement(req, res) {
+  let nav = utilities.getNav()
+  res.render("inventory-management", {
+    title: "Inventory Management",
+    nav,
+    errors: null,
+    messages: req.flash("notice")
+  })
+}
+
+/**
+ * Controller: Inventory Management Dashboard
+ * Delivers /inv/ page
+ */
+export function buildManagementView(req, res) {
+  try {
+    const nav = req.app.locals.utils.getNav(); // your existing nav builder
+
+    res.render("layout", {
+      title: "Inventory Management",
+      view: "inventory-management", // NEW VIEW FILE (next step)
+      nav,
+      messages: null
+    });
+  } catch (err) {
+    console.error("Management View Error:", err);
+    res.status(500).render("layout", {
+      title: "Server Error",
+      view: "errors/500"
+    });
+  }
+}
+
+/**
+ * Build Add Classification View
+ */
+export function buildAddClassification(req, res) {
+  const nav = req.app.locals.utils.getNav();
+
+  res.render("layout", {
+    title: "Add Classification",
+    view: "add-classification",
+    nav,
+    errors: null,
+    messages: req.flash("notice")
+  });
+}
+
+/**
+ * Process Classification Insert
+ */
+import * as invModel from "../models/inventory-model.js";
+
+export async function addClassification(req, res) {
+  const { classification_name } = req.body;
+
+  const result = await invModel.addClassification(classification_name);
+
+  if (result) {
+    req.flash("notice", "Classification added successfully!");
+    const nav = req.app.locals.utils.getNav();
+
+    return res.render("layout", {
+      title: "Inventory Management",
+      view: "inventory-management",
+      nav,
+      errors: null,
+      messages: req.flash("notice")
+    });
+  }
+
+  req.flash("notice", "Failed to add classification.");
+  const nav = req.app.locals.utils.getNav();
+  res.render("layout", {
+    title: "Add Classification",
+    view: "add-classification",
+    nav
+  });
+}

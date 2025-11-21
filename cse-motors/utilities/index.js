@@ -3,6 +3,20 @@
 // ==============================================
 
 /**
+ * Navigation Builder
+ * Returns navigation HTML used in layout.ejs
+ */
+export function getNav() {
+  return `
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li><a href="/inv">Inventory</a></li>
+      <li><a href="/contact">Contact</a></li>
+    </ul>
+  `;
+}
+
+/**
  * Format price as $22,000
  */
 export function formatPrice(price) {
@@ -20,8 +34,7 @@ export function formatMiles(miles) {
 
 /**
  * HTML Builder:
- * Returns HTML string for vehicle listings
- * Required by rubric: view returns built HTML
+ * Required for the rubric: builds dynamic HTML
  */
 export function buildVehicleList(vehicles) {
   let html = "";
@@ -46,7 +59,11 @@ export function buildVehicleList(vehicles) {
   return html;
 }
 
+/**
+ * Export as an object for app.locals.utils
+ */
 export default {
+  getNav,
   formatPrice,
   formatMiles,
   buildVehicleList

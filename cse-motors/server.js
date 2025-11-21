@@ -12,6 +12,11 @@ import morgan from "morgan";
 import indexRoutes from "./routes/index.js";
 import * as utils from "./utilities/index.js";
 import { handleError } from "./controllers/errorController.js";
+import inventoryRoutes from "./routes/inventory.js";
+
+import session from "express-session";
+import flash from "connect-flash";
+
 
 dotenv.config();
 
@@ -42,8 +47,26 @@ app.set("views", path.join(__dirname, "views"));
 // Global template vars
 app.locals.year = new Date().getFullYear();
 
+// Session Middleware (Required for flash messages)
+app.use(session({
+  secret: process.env.SESSION_SECRET || "supersecretkey123",
+  resave: false,
+  saveUninitialized: true,
+}));
+
+// Flash Middleware
+app.use(flash());
+
 // Routes
 app.use("/", indexRoutes);
+
+app.use("/inv", inventoryRoutes);
+
+// Making flash messages available in all views
+app.use((req, res, next) => {
+  res.locals.messages = req.flash();
+  next();
+});
 
 // Health check
 app.get("/health", (req, res) => res.status(200).json({ status: "OK" }));
