@@ -57,16 +57,16 @@ app.use(session({
 // Flash Middleware
 app.use(flash());
 
-// Routes
-app.use("/", indexRoutes);
-
-app.use("/inv", inventoryRoutes);
-
 // Making flash messages available in all views
 app.use((req, res, next) => {
   res.locals.messages = req.flash();
   next();
 });
+
+// Routes
+app.use("/", indexRoutes);
+
+app.use("/inv", inventoryRoutes);
 
 // Health check
 app.get("/health", (req, res) => res.status(200).json({ status: "OK" }));
