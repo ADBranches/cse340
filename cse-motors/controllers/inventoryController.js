@@ -98,29 +98,51 @@ export function buildAddClassification(req, res) {
  */
 import * as invModel from "../models/inventory-model.js";
 
+// In controllers/inventoryController.js
+
 export async function addClassification(req, res) {
   const { classification_name } = req.body;
 
-  const result = await invModel.addClassification(classification_name);
+  try {
+    const result = await invModel.addClassification(classification_name);
 
-  if (result) {
-    req.flash("notice", "Classification added successfully!");
+    if (result) {
+      req.flash("notice", "Classification added successfully!");
+      const nav = req.app.locals.utils.getNav();
+
+      return res.render("layout", {
+        title: "Inventory Management",
+        view: "inventory-management",
+        nav,
+        errors: null,
+        messages: req.flash("notice")
+      });
+    }
+
+  } catch (err) {
+    console.error("Add Classification Error:", err);
     const nav = req.app.locals.utils.getNav();
 
+    // Duplicate key
+    if (err.code === "23505") {
+      req.flash("notice", "That classification name already exists.");
+      return res.render("layout", {
+        title: "Add Classification",
+        view: "add-classification",
+        nav,
+        errors: [{ msg: "Classification already exists." }],
+        messages: req.flash("notice")
+      });
+    }
+
+    // Generic DB failure
+    req.flash("notice", "Unexpected database error.");
     return res.render("layout", {
-      title: "Inventory Management",
-      view: "inventory-management",
+      title: "Add Classification",
+      view: "add-classification",
       nav,
-      errors: null,
+      errors: [{ msg: "Unexpected server error." }],
       messages: req.flash("notice")
     });
   }
-
-  req.flash("notice", "Failed to add classification.");
-  const nav = req.app.locals.utils.getNav();
-  res.render("layout", {
-    title: "Add Classification",
-    view: "add-classification",
-    nav
-  });
 }

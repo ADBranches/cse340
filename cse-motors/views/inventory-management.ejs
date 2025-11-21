@@ -1,16 +1,44 @@
-<main class="management">
-  <h1>Inventory Management</h1>
+<section class="management-wrapper">
+  <h1 class="page-title">Inventory Management</h1>
 
-  <% if (messages) { %>
-    <div class="flash"><%= messages %></div>
+  <% if (messages && messages.length) { %>
+    <div class="alert alert-success">
+      <%= messages %>
+    </div>
   <% } %>
 
-  <section>
+  <div class="actions-box">
     <h2>Actions</h2>
     <ul>
-      <li><a href="/inv/add-classification">Add New Classification</a></li>
-      <li><a href="/inv/add-inventory">Add New Inventory Item</a></li>
+      <li><a href="/inv/add-classification">➕ Add New Classification</a></li>
+      <li><a href="/inv/add-inventory">🚗 Add New Inventory Item</a></li>
     </ul>
-  </section>
-</main>
+  </div>
+</section>
 
+<style>
+  .management-wrapper {
+    max-width: 720px;
+    margin: 2rem auto;
+    background: #fff;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+  }
+
+  .actions-box ul {
+    margin-top: 1rem;
+    padding-left: 1.3rem;
+  }
+
+  .actions-box a {
+    color: #4B0082;
+    font-weight: 600;
+    font-size: 1.1rem;
+    text-decoration: none;
+  }
+
+  .actions-box a:hover {
+    text-decoration: underline;
+  }
+</style>
