@@ -1,2 +1,10 @@
 node_modules
 .env
+
+# uploads
+public/uploads/tmp/
+public/uploads/images/
+public/uploads/thumbs/
+public/uploads/
+/DS_Store
+*.log

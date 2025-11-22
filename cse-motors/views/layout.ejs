@@ -8,19 +8,50 @@
     <main id="main-content">
       <!-- Support both 'body' and 'view' variables for backward compatibility -->
       <% if (typeof body !== 'undefined') { %>
-        <h2 style="color:orange;">DEBUG: Using BODY content</h2>
         <%- body %>
 
       <% } else if (typeof view !== 'undefined') { %>
-        <!-- <h2 style="color:green;">DEBUG: Including VIEW = "<%= view %>"</h2> -->
+
+        <!-- ✅ FLASH MESSAGES SECTION -->
+        <% if (messages && messages.length) { %>
+          <div class="alert alert-success">
+            <% messages.forEach(m => { %>
+              <p><%= m %></p>
+            <% }) %>
+          </div>
+        <% } %>
+
+        <% if (errors && errors.length) { %>
+          <div class="alert alert-danger">
+            <% errors.forEach(e => { %>
+              <p><%= e.msg || e %></p>
+            <% }) %>
+          </div>
+        <% } %>
+
+        <!-- AUTO-HIDE FLASH MESSAGES -->
+        <script>
+          document.addEventListener("DOMContentLoaded", () => {
+            setTimeout(() => {
+              document.querySelectorAll(".alert").forEach(el => el.style.display = "none");
+            }, 4000);
+          });
+        </script>
+
+        <!-- PAGE CONTENT -->
         <%- include(view) %>
 
       <% } else { %>
-        <h2 style="color:red;">DEBUG: NO VIEW PROVIDED</h2>
         <p>Error: No content provided for this page.</p>
       <% } %>
-
     </main>
+
+    <!-- Page-specific validation scripts -->
+    <% if (view === "add-classification-content") { %>
+      <script src="/js/validate-classification.js"></script>
+    <% } else if (view === "add-inventory-content") { %>
+      <script src="/js/validate-inventory.js"></script>
+    <% } %>
 
     <%- include("partials/footer") %>
   </body>

@@ -68,3 +68,20 @@ export default {
   formatMiles,
   buildVehicleList
 };
+
+export async function buildClassificationList(selectedId = null) {
+  const data = await pool.query("SELECT * FROM classification ORDER BY classification_name");
+  let list = `<div class="form-group">
+                <label for="classification_id">Classification</label>
+                <select id="classification_id" name="classification_id" required>`;
+  list += `<option value="">-- Choose Classification --</option>`;
+
+  data.rows.forEach(c => {
+    list += `<option value="${c.classification_id}" ${c.classification_id == selectedId ? "selected" : ""}>
+                ${c.classification_name}
+             </option>`;
+  });
+
+  list += `</select></div>`;
+  return list;
+}
