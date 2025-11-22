@@ -1,5 +1,9 @@
 <section class="management-wrapper">
-  <h1 class="page-title">Inventory Management</h1>
+  <h1 class="page-title">Inventory Management Dashboard</h1>
+  <p class="intro-text">
+    Welcome to the CSE Motors Management Panel.  
+    From here, you can organize your vehicle inventory and classification records.
+  </p>
 
   <% if (messages && messages.length) { %>
     <div class="alert alert-success">
@@ -8,11 +12,14 @@
   <% } %>
 
   <div class="actions-box">
-    <h2>Actions</h2>
+    <h2>Available Actions</h2>
     <ul>
-      <li><a href="/inv/add-classification">➕ Add New Classification</a></li>
-      <li><a href="/inv/add-inventory">🚗 Add New Inventory Item</a></li>
+      <li>➕ <a href="/inv/add-classification">Add New Classification</a></li>
+      <li>🚗 <a href="/inv/add-inventory">Add New Inventory Item</a></li>
     </ul>
+    <p style="margin-top:1rem;">
+      <a href="/inventory" style="color:#4B0082;text-decoration:none;">← View All Vehicles</a>
+    </p>
   </div>
 </section>
 
