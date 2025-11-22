@@ -1,0 +1,36 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:15
+    container_name: csemotors_db
+    restart: always
+    environment:
+      POSTGRES_USER: csemotors_user
+      POSTGRES_PASSWORD: supersecurepassword
+      POSTGRES_DB: csemotors
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+
+  app:
+    build: .
+    container_name: csemotors_app
+    depends_on:
+      - db
+    environment:
+      NODE_ENV: development
+      PORT: 3000
+      DATABASE_URL: postgres://csemotors_user:supersecurepassword@db:5432/csemotors
+      SESSION_SECRET: 8sqMql66jSZE2C0A8g8yJBQG6dO6ogZSqKik6W3bon8IVjorT/q1scnAoxMB9rjn
+    working_dir: /usr/src/app
+    volumes:
+      - .:/usr/src/app
+    ports:
+      - "3000:3000"
+    command: npm start
+    restart: always
+
+volumes:
+  pg_data:

@@ -1,13 +1,23 @@
 // utilities/db.js
 import pkg from "pg";
-const { Pool } = pkg;
-
 import dotenv from "dotenv";
 dotenv.config();
 
+const { Pool } = pkg;
+
+// Ensure DATABASE_URL fallback for local dev
+const connectionString =
+  process.env.DATABASE_URL ||
+  `postgresql://${process.env.PGUSER}:${process.env.PGPASSWORD}@${process.env.PGHOST}:${process.env.PGPORT}/${process.env.PGDATABASE}`;
+
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: process.env.NODE_ENV === "production" ? { rejectUnauthorized: false } : false
+  connectionString,
+  ssl: process.env.NODE_ENV === "production" ? { rejectUnauthorized: false } : false,
 });
+
+// Optional: connection check log
+pool.connect()
+  .then(() => console.log("✅ Database connected successfully"))
+  .catch(err => console.error("❌ Database connection failed:", err.message));
 
 export default pool;
