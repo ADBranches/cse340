@@ -1,5 +1,6 @@
 node_modules
 .env
+pg_data/
 
 # uploads
 public/uploads/tmp/
@@ -8,3 +9,4 @@ public/uploads/thumbs/
 public/uploads/
 /DS_Store
 *.log
+
