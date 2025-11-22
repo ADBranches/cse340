@@ -17,7 +17,7 @@ function setupUploader(dropzoneId, previewId, hiddenFieldId) {
 
   if (!dropzone || !preview || !hiddenField) return;
 
-  // Create hidden file input
+  // Creating hidden file input
   const fileInput = document.createElement("input");
   fileInput.type = "file";
   fileInput.accept = "image/*";
@@ -70,7 +70,6 @@ function processFile(file, previewEl, hiddenField) {
 
   reader.readAsDataURL(file);
 }
-
 
 // Initialize uploaders
 document.addEventListener("DOMContentLoaded", () => {

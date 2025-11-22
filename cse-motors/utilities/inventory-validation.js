@@ -36,7 +36,7 @@ invValidate.checkClassificationData = async (req, res, next) => {
 };
 
 /******************************
- * INVENTORY VALIDATION (PHASE 3)
+ * INVENTORY VALIDATION 
  ******************************/
 
 invValidate.addInventoryRules = () => {

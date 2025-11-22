@@ -1,5 +1,5 @@
 // ========================================
-// FAKE DATABASE MODEL
+// MOCKUP DATABASE MODEL
 // ========================================
 
 export const vehicles = [
@@ -71,19 +71,15 @@ export const vehicles = [
   }
 ];
 
-// ========================================
-// DATABASE-LIKE FUNCTIONS (Rubric Required)
-// ========================================
-
 /**
- * Simulate: SELECT * FROM vehicles;
+ * SimulatION: SELECT * FROM vehicles;
  */
 export function getAllVehicles() {
   return vehicles;
 }
 
 /**
- * Simulate prepared statement:
+ * Simulating....
  * SELECT * FROM vehicles WHERE id = ?;
  */
 export function getVehicleById(id) {

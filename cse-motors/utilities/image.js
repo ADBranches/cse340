@@ -1,4 +1,3 @@
-// utilities/image.js
 import sharp from "sharp";
 import fs from "fs/promises";
 import path from "path";
@@ -6,7 +5,6 @@ import path from "path";
 const OUT_IMG_DIR = "public/uploads/images";
 const OUT_THM_DIR = "public/uploads/thumbs";
 
-// ensure output dirs exist
 await fs.mkdir(OUT_IMG_DIR, { recursive: true });
 await fs.mkdir(OUT_THM_DIR, { recursive: true });
 
@@ -25,7 +23,7 @@ export async function processVehicleImages(tmpFilePath, baseNameNoExt) {
 
   // main optimized image
   await sharp(tmpFilePath)
-    .rotate()               // respect EXIF
+    .rotate()
     .resize({ width: 1600, withoutEnlargement: true })
     .webp({ quality: 82 })
     .toFile(imageOut);
@@ -40,7 +38,7 @@ export async function processVehicleImages(tmpFilePath, baseNameNoExt) {
   // clean up temp file
   try { await fs.unlink(tmpFilePath); } catch {}
 
-  // return web-facing paths (what you’ll store in DB)
+  // return web-facing paths (to be stored in DB)
   return {
     imagePath: `/${imageOut.replace(/^public\//, "")}`,
     thumbPath: `/${thumbOut.replace(/^public\//, "")}`

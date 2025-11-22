@@ -1,7 +1,3 @@
-// ==============================================
-// UTILITIES MODULE (Required for Rubric)
-// ==============================================
-
 /**
  * Navigation Builder
  * Returns navigation HTML used in layout.ejs
@@ -34,7 +30,6 @@ export function formatMiles(miles) {
 
 /**
  * HTML Builder:
- * Required for the rubric: builds dynamic HTML
  */
 export function buildVehicleList(vehicles) {
   let html = "";

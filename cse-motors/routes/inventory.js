@@ -1,12 +1,10 @@
-// routes/inventory.js
-
 import express from "express";
 import * as invController from "../controllers/inventoryController.js";
 import * as invModel from "../models/inventory-model.js";
 import invValidate from "../utilities/inventory-validation.js";
 import { buildClassificationSelect } from "../utilities/classificationSelect.js";
 
-// ✅ NEW IMPORTS for Multer + Sharp
+// NEW IMPORTS for Multer + Sharp
 import { upload } from "../utilities/upload.js";
 import { processVehicleImages } from "../utilities/image.js";
 
@@ -37,13 +35,13 @@ router.get("/add-inventory", invController.buildAddInventory);
 router.post(
   "/add-inventory",
 
-  // 1️⃣ Multer handles file uploads (two fields)
+  // Multer handles file uploads (two fields)
   upload.fields([
     { name: "image_file", maxCount: 1 },
     { name: "thumb_file", maxCount: 1 }
   ]),
 
-  // 2️⃣ Process images → store in /public/uploads/images & /public/uploads/thumbs
+  //  Process images → store in /public/uploads/images & /public/uploads/thumbs
   async (req, res, next) => {
     try {
 
@@ -95,11 +93,11 @@ router.post(
       const thumbBase = path.parse(thmFile.filename).name + "_manual";
       const thumbProcessed = await processVehicleImages(thmFile.path, thumbBase);
 
-      // Inject web paths into req.body for DB
+      // Injecting web paths into req.body for DB
       req.body.inv_image = main.imagePath;
       req.body.inv_thumbnail = thumbProcessed.thumbPath;
 
-      next(); // continue to validation and DB save
+      next(); // continuing to validation and DB save
     } catch (err) {
       console.error("Image processing error:", err);
       req.flash("notice", "Image processing failed.");
@@ -122,11 +120,11 @@ router.post(
     }
   },
 
-  // 3️⃣ Validate text fields
+  //  Validate text fields
   invValidate.addInventoryRules(),
   invValidate.checkInventoryData,
 
-  // 4️⃣ Save to DB
+  // Save to DB
   invController.addInventory
 );
 

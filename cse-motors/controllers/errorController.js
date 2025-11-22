@@ -1,7 +1,4 @@
-// controllers/errorController.js
-
 /**
- * Trigger a forced error (Rubric Requirement)
  * This is linked from the footer: /cause-error
  */
 export function triggerError(req, res, next) {
@@ -9,7 +6,6 @@ export function triggerError(req, res, next) {
 }
 
 /**
- * Global error middleware (Rubric: 10pts)
  * Always renders the 500 error page using layout.ejs
  */
 export function handleError(err, req, res, next) {

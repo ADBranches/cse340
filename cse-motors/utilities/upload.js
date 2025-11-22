@@ -1,7 +1,4 @@
-// utilities/upload.js
-
 import multer from "multer";
-import path from "path";
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -13,7 +10,7 @@ const storage = multer.diskStorage({
   }
 });
 
-// ✅ Enhanced file filter with friendly feedback
+//  file filter
 const fileFilter = (req, file, cb) => {
   const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
   if (!allowedTypes.includes(file.mimetype)) {

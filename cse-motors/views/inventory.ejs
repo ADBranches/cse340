@@ -21,10 +21,10 @@
 
             <p><%= vehicle.description %></p>
 
-            <!-- ⭐ FORMATTED PRICE -->
+            <!-- FORMATTED PRICE -->
             <p><strong>Price:</strong> <%= utils.formatPrice(vehicle.price) %></p>
 
-            <!-- ⭐ FORMATTED MILES -->
+            <!-- FORMATTED MILES -->
             <p><strong>Mileage:</strong> <%= utils.formatMiles(vehicle.miles) %></p>
 
             <a href="/inventory/detail/<%= vehicle.id %>" class="btn-primary">View Details</a>

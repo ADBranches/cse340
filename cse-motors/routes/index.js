@@ -25,10 +25,10 @@ router.get("/inventory", showInventory);
 // VEHICLE DETAIL PAGE
 router.get("/inventory/detail/:id", showVehicleDetail);
 
-// ERROR TEST ROUTE (Rubric requirement)
+// ERROR TEST ROUTE
 router.get("/cause-error", triggerError);
 
-// CONTACT (no controller needed)
+// CONTACT
 router.get("/contact", (req, res) => {
   res.render("layout", {
     title: "Contact",
