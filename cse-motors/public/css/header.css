@@ -1,0 +1,132 @@
+/* ==========================================
+   HEADER & NAV STYLES — CSE Motors
+   ========================================== */
+
+/* ---------- Header Wrapper ---------- */
+.site-header {
+  background: linear-gradient(90deg, #25005a, #3a007f);
+  color: #fff;
+  padding: 1rem 2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+/* ---------- Header Layout ---------- */
+.site-header .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* ---------- Logo ---------- */
+.logo a {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #fff;
+  text-decoration: none;
+  letter-spacing: 0.5px;
+  transition: opacity 0.25s ease;
+}
+
+.logo a:hover {
+  opacity: 0.85;
+}
+
+/* ---------- Auth Links ---------- */
+.auth-links {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 0.95rem;
+}
+
+.auth-links a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 500;
+  transition: opacity 0.25s ease;
+}
+
+.auth-links a:hover {
+  opacity: 0.8;
+}
+
+.auth-links .logout {
+  background: #fff;
+  color: #3a007f;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  font-weight: 600;
+}
+
+.auth-links .logout:hover {
+  background: #f0f0f0;
+  color: #2a005a;
+}
+
+/* ---------- Navigation ---------- */
+.site-nav {
+  background: #ffffff;
+  border-top: 1px solid #e5e5e5;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.site-nav__list {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  list-style: none;
+  margin: 0;
+  padding: 0.8rem;
+  gap: 2rem;
+}
+
+.site-nav__list a {
+  color: #2a005a;
+  font-weight: 600;
+  text-decoration: none;
+  position: relative;
+  transition: color 0.2s ease;
+}
+
+.site-nav__list a::after {
+  content: "";
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: #3a007f;
+  transition: width 0.25s ease;
+}
+
+.site-nav__list a:hover::after {
+  width: 100%;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 768px) {
+  .site-header .container {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .auth-links {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .site-nav__list {
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+}
+
+/* ---------- Scroll Shadow Effect ---------- */
+.scrolled .site-header {
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}

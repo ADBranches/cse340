@@ -1,0 +1,97 @@
+<%- include('../partials/head') %>
+
+<main class="update-account">
+  <% if (errors && errors.length) { %>
+    <div class="alert alert-error"><%= errors.join('<br>') %></div>
+  <% } %>
+  <% if (notices && notices.length) { %>
+    <div class="alert alert-success"><%= notices.join('<br>') %></div>
+  <% } %>
+
+  <h1>Update Your Account</h1>
+
+  <!-- Personal Info Update -->
+  <section class="update-section">
+    <h2>Update Personal Information</h2>
+    <form id="update-info-form" action="/account/update" method="POST">
+      <label>First Name</label>
+      <input type="text" name="first_name" value="<%= account.first_name %>" required>
+
+      <label>Last Name</label>
+      <input type="text" name="last_name" value="<%= account.last_name %>" required>
+
+      <label>Email</label>
+      <input type="email" name="email" value="<%= account.email %>" required>
+
+      <button type="submit" class="btn-primary">Save Changes</button>
+    </form>
+  </section>
+
+  <!-- Password Update -->
+  <section class="update-section">
+    <h2>Change Password</h2>
+    <p class="password-hint">
+      Password must contain at least 8 characters, including uppercase, lowercase, number, and special character.
+    </p>
+    <form id="password-form" action="/account/update-password" method="POST">
+      <label>New Password</label>
+      <input type="password" name="password" required>
+
+      <label>Confirm Password</label>
+      <input type="password" name="confirm_password" required>
+
+      <button type="submit" class="btn-secondary">Update Password</button>
+    </form>
+  </section>
+
+  <section class="nav-return">
+    <a href="/account/management" class="btn-logout">← Back to Dashboard</a>
+  </section>
+</main>
+
+<script src="/js/validate-account.js"></script>
+
+<style>
+  .update-account {
+    max-width: 600px;
+    margin: 2rem auto;
+    padding: 1rem;
+    background: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.1);
+  }
+  .update-section {
+    margin-top: 2rem;
+  }
+  .update-section h2 {
+    margin-bottom: 1rem;
+  }
+  .update-section label {
+    display: block;
+    margin-top: 1rem;
+    font-weight: bold;
+  }
+  .update-section input {
+    width: 100%;
+    padding: 8px;
+    margin-top: 4px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  .password-hint {
+    font-size: 0.9rem;
+    color: #555;
+    margin-bottom: 0.5rem;
+  }
+  .nav-return {
+    margin-top: 2rem;
+    text-align: center;
+  }
+  .btn-logout {
+    background: #444;
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 4px;
+    text-decoration: none;
+  }
+</style>

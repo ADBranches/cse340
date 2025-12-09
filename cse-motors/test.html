@@ -1,0 +1,35 @@
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login</title>
+  <meta name="description" content="CSE Motors – premium vehicles with transparency and service." />
+  <link rel="stylesheet" href="/css/style.css" media="screen" />
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <script src="/js/main.js" defer></script>
+</head>
+
+<div class="auth-container">
+  <h1 class="page-title">Login</h1>
+  
+
+  <form method="POST" action="/account/login" class="form-card">
+    <label>Email</label>
+    <input type="email" name="email" placeholder="user@example.com" required />
+
+    <label>Password</label>
+    <input type="password" name="password" required />
+
+    <button type="submit" class="btn-primary">Login</button>
+  </form>
+</div>
+<footer class="site-footer">
+  <p>&copy; 2025 CSE Motors. All rights reserved.</p>
+  <p><small>Safe, reliable vehicles for your family.</small></p>
+
+  <p>
+    <a href="/cause-error" style="color: red; font-weight: bold;">
+      Trigger Server Error
+    </a>
+  </p>
+</footer>
+

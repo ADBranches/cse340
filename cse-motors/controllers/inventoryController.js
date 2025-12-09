@@ -3,6 +3,7 @@
 import { getAllVehicles, getVehicleById } from "../data/vehicles.js";
 import * as invModel from "../models/inventory-model.js";
 import { buildClassificationSelect } from "../utilities/classificationSelect.js";
+import { requireRole } from "../middleware/authMiddleware.js";
 
 // =============================
 // SHOW INVENTORY LIST
@@ -73,6 +74,10 @@ export function buildManagementView(req, res) {
 // =============================
 export function buildAddClassification(req, res) {
   const nav = req.app.locals.utils.getNav();
+  if (!req.account || !["Admin", "Employee"].includes(req.account.account_type)) {
+    req.flash("error", "Access denied: Admin or Employee role required.");
+    return res.redirect("/account/management");
+  }
 
   res.render("layout", {
     title: "Add Classification",
@@ -88,6 +93,10 @@ export function buildAddClassification(req, res) {
 // =============================
 export async function addClassification(req, res) {
   const { classification_name } = req.body;
+  if (!req.account || !["Admin", "Employee"].includes(req.account.account_type)) {
+    req.flash("error", "Access denied: Admin or Employee role required.");
+    return res.redirect("/account/management");
+  }
 
   try {
     const result = await invModel.addClassification(classification_name);
@@ -133,6 +142,12 @@ export async function addClassification(req, res) {
 // ADD INVENTORY VIEW
 // =============================
 export async function buildAddInventory(req, res) {
+  // Inline Authorization Check
+  if (!req.account || !["Admin", "Employee"].includes(req.account.account_type)) {
+    req.flash("error", "Access denied: Admin or Employee role required.");
+    return res.redirect("/account/management");
+  }
+
   try {
     const classifications = await invModel.getClassifications();
     const nav = req.app.locals.utils.getNav();
@@ -174,6 +189,11 @@ export async function buildAddInventory(req, res) {
 // PROCESS INVENTORY INSERT
 // =============================
 export async function addInventory(req, res) {
+  if (!req.account || !["Admin", "Employee"].includes(req.account.account_type)) {
+    req.flash("error", "Access denied: Admin or Employee role required.");
+    return res.redirect("/account/management");
+  } 
+
   try {
     const saved = await invModel.addInventory(req.body);
 
@@ -204,3 +224,132 @@ export async function addInventory(req, res) {
     });
   }
 }
+// =============================
+// EDIT INVENTORY VIEW
+// =============================
+export async function editInventoryView(req, res) {
+  if (!req.account || !["Admin", "Employee"].includes(req.account.account_type)) {
+    req.flash("error", "Access denied: Admin or Employee role required.");
+    return res.redirect("/account/management");
+  }
+
+  try {
+    const invId = req.params.inv_id;
+    const vehicle = await invModel.getInventoryById(invId);
+    const classifications = await invModel.getClassifications();
+    const nav = req.app.locals.utils.getNav();
+    const classificationList = buildClassificationSelect(classifications, vehicle.classification_id);
+
+    if (!vehicle) {
+      req.flash("error", "Vehicle not found.");
+      return res.redirect("/inv/");
+    }
+
+    res.render("layout", {
+      title: `Edit ${vehicle.inv_make} ${vehicle.inv_model}`,
+      view: "edit-inventory-content",
+      nav,
+      classificationList,
+      vehicle,
+      errors: null,
+      messages: req.flash("notice")
+    });
+  } catch (err) {
+    console.error("❌ Edit Inventory View Error:", err);
+    res.status(500).render("layout", {
+      title: "Server Error",
+      view: "errors/500",
+      message: "Unable to load edit form."
+    });
+  }
+}
+
+// =============================
+// UPDATE INVENTORY RECORD
+// =============================
+export async function updateInventory(req, res) {
+  if (!req.account || !["Admin", "Employee"].includes(req.account.account_type)) {
+    req.flash("error", "Access denied: Admin or Employee role required.");
+    return res.redirect("/account/management");
+  }
+
+  try {
+    const updated = await invModel.updateInventory(req.body);
+
+    if (updated) {
+      req.flash("notice", "Inventory item updated successfully!");
+      return res.redirect("/inv/");
+    }
+
+    req.flash("error", "Failed to update inventory item.");
+    res.redirect(`/inv/edit/${req.body.inv_id}`);
+  } catch (err) {
+    console.error("❌ Update Inventory Error:", err);
+    req.flash("error", "Unexpected server error while updating inventory.");
+    res.redirect(`/inv/edit/${req.body.inv_id}`);
+  }
+}
+
+// =============================
+// DELETE INVENTORY VIEW
+// =============================
+export async function deleteInventoryView(req, res) {
+  if (!req.account || !["Admin", "Employee"].includes(req.account.account_type)) {
+    req.flash("error", "Access denied: Admin or Employee role required.");
+    return res.redirect("/account/management");
+  }
+
+  try {
+    const invId = req.params.inv_id;
+    const vehicle = await invModel.getInventoryById(invId);
+    const nav = req.app.locals.utils.getNav();
+
+    if (!vehicle) {
+      req.flash("error", "Vehicle not found.");
+      return res.redirect("/inv/");
+    }
+
+    res.render("layout", {
+      title: "Confirm Delete",
+      view: "delete-inventory-content",
+      nav,
+      vehicle,
+      errors: null,
+      messages: req.flash("notice")
+    });
+  } catch (err) {
+    console.error("❌ Delete View Error:", err);
+    res.status(500).render("layout", {
+      title: "Server Error",
+      view: "errors/500",
+      message: "Unable to load delete confirmation."
+    });
+  }
+}
+
+// =============================
+// DELETE INVENTORY ACTION
+// =============================
+export async function deleteInventory(req, res) {
+  if (!req.account || !["Admin", "Employee"].includes(req.account.account_type)) {
+    req.flash("error", "Access denied: Admin or Employee role required.");
+    return res.redirect("/account/management");
+  }
+
+  try {
+    const deleted = await invModel.deleteInventory(req.body.inv_id);
+
+    if (deleted) {
+      req.flash("notice", "Inventory item deleted successfully!");
+      return res.redirect("/inv/");
+    }
+
+    req.flash("error", "Failed to delete inventory item.");
+    res.redirect("/inv/");
+  } catch (err) {
+    console.error("❌ Delete Inventory Error:", err);
+    req.flash("error", "Unexpected server error while deleting inventory.");
+    res.redirect("/inv/");
+  }
+}
+

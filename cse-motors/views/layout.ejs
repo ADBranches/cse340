@@ -1,58 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
-  <%- include("partials/head", { title }) %>
+  <head>
+    <!-- ✅ Include your shared <head> partial -->
+    <%- include("partials/head", { title }) %>
+
+    <!-- ✅ Load external CSS for global and auth & headerstyling -->
+    <link rel="stylesheet" href="/css/auth.css">
+    <link rel="stylesheet" href="/css/header.css">
+  </head>
+
   <body>
-    <%- include("partials/header") %>
-    <%- include("partials/nav") %>
+    <%
+      // ✅ Safe fallbacks so EJS never throws ReferenceError
+      const accountSafe = typeof account !== "undefined" ? account : null;
+      const isPrivilegedSafe = typeof isPrivileged !== "undefined" ? isPrivileged : false;
+      const currentView = typeof view !== "undefined" ? view : "";
+      const isAuthPage = currentView.includes("account/login") || currentView.includes("account/register");
+    %>
 
-    <main id="main-content">
-      <!-- Support both 'body' and 'view' variables for backward compatibility -->
-      <% if (typeof body !== 'undefined') { %>
-        <%- body %>
+    <!-- ✅ Conditionally include header/nav for non-auth pages -->
+    <% if (!isAuthPage) { %>
+      <%- include("partials/header", { account: accountSafe, isPrivileged: isPrivilegedSafe }) %>
+      <%- include("partials/nav", { account: accountSafe, isPrivileged: isPrivilegedSafe }) %>
+    <% } %>
 
-      <% } else if (typeof view !== 'undefined') { %>
+    <!-- ✅ Main Content Wrapper -->
+    <main id="main-content" class="<%= isAuthPage ? 'auth-layout' : '' %>">
+      <!-- ✅ FLASH MESSAGES -->
+      <% if (messages && messages.length) { %>
+        <div class="alert alert-success">
+          <% messages.forEach(m => { %><p><%= m %></p><% }) %>
+        </div>
+      <% } %>
 
-        <!-- FLASH MESSAGES SECTION -->
-        <% if (messages && messages.length) { %>
-          <div class="alert alert-success">
-            <% messages.forEach(m => { %>
-              <p><%= m %></p>
-            <% }) %>
-          </div>
-        <% } %>
+      <% if (errors && errors.length) { %>
+        <div class="alert alert-danger">
+          <% errors.forEach(e => { %><p><%= e.msg || e %></p><% }) %>
+        </div>
+      <% } %>
 
-        <% if (errors && errors.length) { %>
-          <div class="alert alert-danger">
-            <% errors.forEach(e => { %>
-              <p><%= e.msg || e %></p>
-            <% }) %>
-          </div>
-        <% } %>
-
-        <!-- AUTO-HIDE FLASH MESSAGES -->
-        <script>
-          document.addEventListener("DOMContentLoaded", () => {
-            setTimeout(() => {
-              document.querySelectorAll(".alert").forEach(el => el.style.display = "none");
-            }, 4000);
-          });
-        </script>
-
-        <!-- PAGE CONTENT -->
+      <!-- ✅ PAGE CONTENT -->
+      <% if (typeof view !== "undefined") { %>
         <%- include(view) %>
-
+      <% } else if (typeof body !== "undefined") { %>
+        <%- body %>
       <% } else { %>
         <p>Error: No content provided for this page.</p>
       <% } %>
     </main>
 
-    <!-- Page-specific validation scripts -->
-    <% if (view === "add-classification-content") { %>
-      <script src="/js/validate-classification.js"></script>
-    <% } else if (view === "add-inventory-content") { %>
-      <script src="/js/validate-inventory.js"></script>
+    <!-- ✅ Conditionally include footer -->
+    <% if (!isAuthPage) { %>
+      <%- include("partials/footer") %>
     <% } %>
 
-    <%- include("partials/footer") %>
+    <!-- ✅ Auto-hide flash messages -->
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        setTimeout(() => {
+          document.querySelectorAll(".alert").forEach(el => (el.style.display = "none"));
+        }, 4000);
+      });
+    </script>
   </body>
 </html>

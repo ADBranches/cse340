@@ -2,7 +2,36 @@
   <ul class="site-nav__list">
     <li><a href="/">Home</a></li>
     <li><a href="/inventory">Inventory</a></li>
-    <li><a href="/inv">Manage</a></li>
+
+    <% if (account && isPrivileged) { %>
+      <li><a href="/inv">Manage</a></li>
+    <% } %>
+
     <li><a href="/contact">Contact</a></li>
   </ul>
 </nav>
+
+<style>
+  .site-nav {
+    background: #f0f0f0;
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+  }
+  .site-nav__list {
+    display: flex;
+    list-style: none;
+    justify-content: center;
+    gap: 1.5rem;
+    padding: 0.75rem;
+    margin: 0;
+  }
+  .site-nav__list a {
+    text-decoration: none;
+    color: #333;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+  .site-nav__list a:hover {
+    color: #007bff;
+  }
+</style>
