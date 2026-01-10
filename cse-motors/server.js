@@ -26,7 +26,7 @@ const __dirname = path.dirname(__filename);
 const app = express();
 
 /* =======================================================
-   🛡️ SECURITY HEADERS (Relaxed CSP for Inline JS & Styles)
+   SECURITY HEADERS (Relaxed CSP for Inline JS & Styles)
 ======================================================= */
 app.use((req, res, next) => {
   res.setHeader(
@@ -45,13 +45,13 @@ app.use((req, res, next) => {
 });
 
 /* =======================================================
-   ⚙️ MIDDLEWARE SETUP — ORDER MATTERS!
+   MIDDLEWARE SETUP — ORDER MATTERS
 ======================================================= */
 
-// 1️⃣ Parse cookies first
+// 1. Parse cookies first
 app.use(cookieParser());
 
-// 2️⃣ Session middleware
+// 2. Session middleware
 app.use(
   session({
     secret: process.env.SESSION_SECRET || "super-secret-key",
@@ -61,48 +61,48 @@ app.use(
   })
 );
 
-// 3️⃣ Flash messages
+// 3. Flash messages
 app.use(flash());
 
-// 4️⃣ Make flash data available in all EJS views
+// 4. Make flash data available in all EJS views
 app.use((req, res, next) => {
   res.locals.messages = req.flash("notice");
   res.locals.errors = req.flash("error");
   next();
 });
 
-// 5️⃣ Body parsers (must come BEFORE JWT + routes)
+// 5. Body parsers (must come BEFORE JWT + routes)
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// 6️⃣ JWT Verification & Global Context
+// 6. JWT Verification & Global Context (login flow)
 app.use(verifyToken);
 app.use(globalAuthContext);
 
-// 7️⃣ Utilities and app locals
+// 7. Utilities and app locals
 app.locals.utils = utils;
 
-// 8️⃣ Request logger (skip in test mode)
+// 8. Request logger (skip in test mode)
 if (process.env.NODE_ENV !== "test") app.use(morgan("dev"));
 
-// 9️⃣ Serve static assets
+// 9. Serve static assets
 app.use(express.static(path.join(__dirname, "public")));
 
-// 🔟 View engine
+// 10. View engine
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.locals.year = new Date().getFullYear();
 
 /* =======================================================
-   🚦 ROUTES (Must precede 404 & Error Handlers)
+   ROUTES (Must precede 404 & Error Handlers)
 ======================================================= */
 app.use("/", indexRoutes);
 app.use("/inv", inventoryRoutes);
 app.use("/account", accountRoutes);
 
-// ✅ TEMPORARY DEBUG ROUTE — place here!
+// Temporary debug route
 app.post("/debug-register", (req, res) => {
-  console.log("📥 Received register POST:", req.body);
+  console.log("Received register POST:", req.body);
   res.json({ received: true, body: req.body });
 });
 
@@ -110,7 +110,7 @@ app.post("/debug-register", (req, res) => {
 app.get("/health", (req, res) => res.status(200).json({ status: "OK" }));
 
 /* =======================================================
-   🚫 ERROR HANDLERS
+   ERROR HANDLERS
 ======================================================= */
 // 404 Not Found
 app.use((req, res) => {
@@ -122,7 +122,7 @@ app.use((req, res) => {
 
 // 500 Internal Server Error
 app.use((err, req, res, next) => {
-  console.error("❌ Server Error:", err);
+  console.error("Server Error:", err);
   res.status(500).render("layout", {
     title: "Server Error",
     view: "errors/500",
@@ -131,11 +131,11 @@ app.use((err, req, res, next) => {
 });
 
 /* =======================================================
-   🚀 SERVER START
+   SERVER START
 ======================================================= */
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, "0.0.0.0", () => {
-  console.log(`✅ CSE Motors server running → http://localhost:${PORT}`);
+  console.log(`CSE Motors server running at http://localhost:${PORT}`);
 });
 
 export default app;
