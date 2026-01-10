@@ -1,150 +1,105 @@
 <%- include('../partials/head') %>
+<%- include('../partials/alerts') %>
 
 <main class="auth-wrapper">
   <section class="auth-card">
     <h1 class="auth-title">Login to CSE Motors</h1>
 
-    <% if (errors && errors.length) { %>
-      <div class="alert alert-error"><%= errors.join('<br>') %></div>
-    <% } %>
+    <div id="status-box" class="alert hidden"></div>
 
-    <% if (messages && messages.length) { %>
-      <div class="alert alert-success"><%= messages.join('<br>') %></div>
-    <% } %>
-
-    <form method="POST" action="/account/login" class="auth-form">
+    <form id="login-form" method="POST" action="/account/login" class="auth-form">
       <div class="form-group">
         <label for="email">Email</label>
-        <input id="email" type="email" name="email" placeholder="user@example.com" required />
+        <input
+          id="email"
+          type="email"
+          name="email"
+          placeholder="user@example.com"
+          required
+          autocomplete="email"
+        />
       </div>
 
       <div class="form-group">
         <label for="password">Password</label>
-        <input id="password" type="password" name="password" placeholder="********" required />
+        <input
+          id="password"
+          type="password"
+          name="password"
+          placeholder="********"
+          required
+          autocomplete="current-password"
+        />
       </div>
 
-      <button type="submit" class="btn-primary">Login</button>
+      <button type="submit" class="btn-primary w-full mt-4">Login</button>
     </form>
 
-    <p class="register-text">
-      Don’t have an account? <a href="/account/register">Register here</a>
+    <p class="register-text mt-4 text-center">
+      Don’t have an account?
+      <a href="/account/register" class="text-purple-700 hover:underline">Register here</a>
     </p>
   </section>
 </main>
 
-<style>
-  /* --- Global Login Wrapper --- */
-  .auth-wrapper {
-    min-height: 80vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: #f7f7fb;
-    padding: 2rem 1rem;
-  }
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const form = document.getElementById("login-form");
+  const statusBox = document.getElementById("status-box");
 
-  /* --- Card --- */
-  .auth-card {
-    background: #ffffff;
-    width: 100%;
-    max-width: 400px;
-    padding: 2rem;
-    border-radius: 12px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-    animation: fadeIn 0.4s ease-in-out;
-  }
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    statusBox.className = "alert alert-info";
+    statusBox.textContent = "⏳ Attempting login...";
+    statusBox.classList.remove("hidden");
 
-  .auth-title {
-    font-size: 1.6rem;
-    color: #350076;
-    font-weight: 700;
-    text-align: center;
-    margin-bottom: 1.5rem;
-  }
+    try {
+      const formData = new FormData(form);
+      const res = await fetch(form.action, {
+        method: form.method,
+        headers: {
+          "Accept": "application/json"
+        },
+        body: formData,
+        redirect: "manual" // 👈 prevent automatic redirect
+      });
 
-  /* --- Form Styling --- */
-  .auth-form {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
+      console.log("📡 Raw response:", res.status, res.type);
 
-  .form-group label {
-    font-weight: 600;
-    color: #333;
-    margin-bottom: 0.3rem;
-  }
+      // Try parsing JSON only if possible
+      let data = {};
+      try {
+        data = await res.json();
+      } catch {
+        console.warn("⚠️ Non-JSON response (likely HTML redirect)");
+      }
 
-  .form-group input {
-    width: 100%;
-    padding: 0.65rem;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    font-size: 1rem;
-    outline: none;
-    transition: all 0.2s ease;
-  }
-
-  .form-group input:focus {
-    border-color: #6f42c1;
-    box-shadow: 0 0 5px rgba(111, 66, 193, 0.3);
-  }
-
-  /* --- Buttons --- */
-  .btn-primary {
-    margin-top: 0.5rem;
-    background: linear-gradient(135deg, #5a2ca0, #7e57c2);
-    color: #fff;
-    border: none;
-    border-radius: 6px;
-    padding: 0.75rem;
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.25s ease;
-  }
-
-  .btn-primary:hover {
-    background: linear-gradient(135deg, #4a1e8c, #6f42c1);
-  }
-
-  /* --- Alerts --- */
-  .alert {
-    padding: 0.75rem;
-    border-radius: 6px;
-    margin-bottom: 1rem;
-    text-align: center;
-  }
-
-  .alert-success {
-    background: #e6ffed;
-    color: #155724;
-  }
-
-  .alert-error {
-    background: #ffe6e6;
-    color: #8b0000;
-  }
-
-  /* --- Register Link --- */
-  .register-text {
-    margin-top: 1rem;
-    text-align: center;
-    color: #444;
-  }
-
-  .register-text a {
-    color: #6f42c1;
-    font-weight: 600;
-    text-decoration: none;
-  }
-
-  .register-text a:hover {
-    text-decoration: underline;
-  }
-
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-8px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-</style>
+      if (res.status === 200 && data.success) {
+        statusBox.className = "alert alert-success";
+        statusBox.textContent = "✅ Login successful. Redirecting...";
+        setTimeout(() => (window.location.href = "/account/management"), 1000);
+      } else if (res.status === 401) {
+        statusBox.className = "alert alert-error";
+        statusBox.textContent = data.message || "⚠️ No user found with that email.";
+      } else if (res.status === 403) {
+        statusBox.className = "alert alert-error";
+        statusBox.textContent = data.message || "⚠️ Incorrect password.";
+      } else if (res.status >= 500) {
+        statusBox.className = "alert alert-error";
+        statusBox.textContent = data.message || "💥 Server error during login.";
+      } else if (res.type === "opaqueredirect" || res.status === 0) {
+        // Happens if Express redirected (HTML)
+        statusBox.className = "alert alert-error";
+        statusBox.textContent = "⚠️ Invalid credentials — check your email or password.";
+      } else {
+        statusBox.className = "alert alert-error";
+        statusBox.textContent = data.message || "⚠️ Unexpected response.";
+      }
+    } catch (err) {
+      console.error("🚨 Network error:", err);
+      statusBox.className = "alert alert-error";
+      statusBox.textContent = "💥 Network or server not reachable.";
+    }
+  });
+});
+</script>

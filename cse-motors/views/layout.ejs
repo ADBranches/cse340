@@ -7,6 +7,8 @@
     <!-- ✅ Load external CSS for global and auth & headerstyling -->
     <link rel="stylesheet" href="/css/auth.css">
     <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/account-update.css">
+    <link rel="stylesheet" href="/css/account-management.css">
   </head>
 
   <body>
@@ -62,5 +64,9 @@
         }, 4000);
       });
     </script>
+    <% if (process.env.NODE_ENV === "development") { %>
+      <script src="/js/auth-debug.js"></script>
+    <% } %>
+    
   </body>
 </html>

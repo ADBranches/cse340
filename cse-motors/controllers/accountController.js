@@ -36,10 +36,17 @@ export const loginAccount = async (req, res) => {
     console.log("📊 Query results:", userQuery.rows.length);
 
     if (userQuery.rows.length === 0) {
-      console.log("❌ No user found");
-      req.flash("error", "Invalid email or password");
+      console.warn("❌ No user found:", req.body.email);
+      if (isAjax) {
+        return res.status(401).json({
+          success: false,
+          message: "No user found with that email.",
+        });
+      }
+      req.flash("error", "No account found with that email.");
       return res.redirect("/account/login");
     }
+
 
     const user = userQuery.rows[0];
     console.log("✅ User found:", user.account_email);
@@ -54,8 +61,14 @@ export const loginAccount = async (req, res) => {
     console.log("🔑 Password valid?", validPassword);
 
     if (!validPassword) {
-      console.log("❌ Password comparison failed");
-      req.flash("error", "Invalid email or password");
+      console.warn("❌ Invalid password for:", req.body.email);
+      if (isAjax) {
+        return res.status(403).json({
+          success: false,
+          message: "Incorrect password.",
+        });
+      }
+      req.flash("error", "Incorrect password.");
       return res.redirect("/account/login");
     }
 
@@ -83,15 +96,28 @@ export const loginAccount = async (req, res) => {
       maxAge: 2 * 60 * 60 * 1000
     });
 
+    if (isAjax) {
+      return res.json({
+        success: true,
+        message: "Login successful.",
+      });
+    }
+
     req.flash("notice", `Welcome back, ${user.account_firstname}!`);
     console.log("🔄 Redirecting to /account/management");
     return res.redirect("/account/management");
   } catch (error) {
     console.error("💥 LOGIN ERROR:", error);
+    if (isAjax) {
+      return res
+        .status(500)
+        .json({ success: false, message: "Server error during login." });
+    }
     req.flash("error", "Login failed. Please try again.");
     return res.redirect("/account/login");
-  }
-};
+
+      }
+    };
 
 /** Logout – Clear JWT cookie */
 export const logoutAccount = (req, res) => {
@@ -306,13 +332,19 @@ export const processAccountUpdate = async (req, res) => {
   const { account_id } = req.account;
 
   try {
+    const isAjax =
+      req.xhr ||
+      (req.headers["x-requested-with"] &&
+        req.headers["x-requested-with"].toLowerCase() === "xmlhttprequest") ||
+      (req.headers.accept && req.headers.accept.includes("application/json"));
+
     await updateAccountInfo(account_id, first_name, last_name, email);
     req.flash("notice", "Account information updated successfully.");
-    res.redirect("/account/management");
+    res.redirect(`/account/update/${account_id}`);
   } catch (err) {
     console.error("⚠️ Account info update failed:", err);
     req.flash("error", "Could not update account information.");
-    res.redirect("back");
+    res.redirect(`/account/update/${account_id}`);
   }
 };
 
@@ -325,10 +357,10 @@ export const processPasswordChange = async (req, res) => {
     const hashed = await hashPassword(password);
     await updatePassword(account_id, hashed);
     req.flash("notice", "Password updated successfully.");
-    res.redirect("/account/management");
+    res.redirect(`/account/update/${account_id}`);
   } catch (err) {
     console.error("⚠️ Password update failed:", err);
     req.flash("error", "Could not update password.");
-    res.redirect("back");
+    res.redirect(`/account/update/${account_id}`);
   }
 };

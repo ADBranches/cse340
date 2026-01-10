@@ -1,17 +1,36 @@
 <%- include('../partials/head') %>
 
-<main class="update-account">
-  <% if (errors && errors.length) { %>
-    <div class="alert alert-error"><%= errors.join('<br>') %></div>
-  <% } %>
-  <% if (notices && notices.length) { %>
-    <div class="alert alert-success"><%= notices.join('<br>') %></div>
-  <% } %>
+<main class="update-page">
+  <section class="update-card">
+    <% if (errors && errors.length) { %>
+      <div class="alert alert-error"><%= errors.join('<br>') %></div>
+    <% } %>
 
-  <h1>Update Your Account</h1>
+    <% if (messages && messages.length) { %>
+      <div class="alert alert-success"><%= messages.join('<br>') %></div>
+    <% } %>
 
-  <!-- Personal Info Update -->
-  <section class="update-section">
+    <h1>Update Your Account</h1>
+
+    <div class="flash-container">
+    <% if (errors && errors.length) { %>
+        <div class="flash flash-error">
+        <i class="fas fa-exclamation-circle"></i>
+        <span><%= errors.join('<br>') %></span>
+        <a href="#" class="flash-close" onclick="this.parentElement.remove()">×</a>
+        </div>
+    <% } %>
+
+    <% if (messages && messages.length) { %>
+        <div class="flash flash-success">
+        <i class="fas fa-check-circle"></i>
+        <span><%= messages.join('<br>') %></span>
+        <a href="#" class="flash-close" onclick="this.parentElement.remove()">×</a>
+        </div>
+    <% } %>
+    </div>
+
+    <!-- Personal Info Update -->
     <h2>Update Personal Information</h2>
     <form id="update-info-form" action="/account/update" method="POST">
       <label>First Name</label>
@@ -25,10 +44,8 @@
 
       <button type="submit" class="btn-primary">Save Changes</button>
     </form>
-  </section>
 
-  <!-- Password Update -->
-  <section class="update-section">
+    <!-- Password Update -->
     <h2>Change Password</h2>
     <p class="password-hint">
       Password must contain at least 8 characters, including uppercase, lowercase, number, and special character.
@@ -42,56 +59,8 @@
 
       <button type="submit" class="btn-secondary">Update Password</button>
     </form>
-  </section>
 
-  <section class="nav-return">
     <a href="/account/management" class="btn-logout">← Back to Dashboard</a>
   </section>
+  <script src="/js/validate-account.js"></script>
 </main>
-
-<script src="/js/validate-account.js"></script>
-
-<style>
-  .update-account {
-    max-width: 600px;
-    margin: 2rem auto;
-    padding: 1rem;
-    background: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,.1);
-  }
-  .update-section {
-    margin-top: 2rem;
-  }
-  .update-section h2 {
-    margin-bottom: 1rem;
-  }
-  .update-section label {
-    display: block;
-    margin-top: 1rem;
-    font-weight: bold;
-  }
-  .update-section input {
-    width: 100%;
-    padding: 8px;
-    margin-top: 4px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-  .password-hint {
-    font-size: 0.9rem;
-    color: #555;
-    margin-bottom: 0.5rem;
-  }
-  .nav-return {
-    margin-top: 2rem;
-    text-align: center;
-  }
-  .btn-logout {
-    background: #444;
-    color: #fff;
-    padding: 8px 16px;
-    border-radius: 4px;
-    text-decoration: none;
-  }
-</style>

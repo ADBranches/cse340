@@ -1,31 +1,33 @@
 // models/account-model.js
-/**
- * Account Model – CSE Motors
- * All database interactions for user accounts use parameterized queries
- * for maximum security and deployment readiness.
- */
 
 import pool from "../utilities/db.js";
 
-/**
- * Fetch an account by email – used at login.
- */
+/** Fetch an account by email – used at login. */
 export async function findByEmail(email) {
   const sql = `
-    SELECT account_id, first_name, last_name, email, password, account_type
+    SELECT 
+      account_id, 
+      account_firstname, 
+      account_lastname, 
+      account_email, 
+      account_password, 
+      account_type
     FROM account
-    WHERE email = $1
+    WHERE account_email = $1
   `;
   const result = await pool.query(sql, [email]);
   return result.rows[0];
 }
 
-/**
- * Fetch an account by id – used in management/update views.
- */
+/** Fetch an account by id – used in management/update views. */
 export async function findById(account_id) {
   const sql = `
-    SELECT account_id, first_name, last_name, email, account_type
+    SELECT 
+      account_id, 
+      account_firstname, 
+      account_lastname, 
+      account_email, 
+      account_type
     FROM account
     WHERE account_id = $1
   `;
@@ -33,61 +35,42 @@ export async function findById(account_id) {
   return result.rows[0];
 }
 
-/**
- * Update basic user details.
- */
-export async function updateInfo(account_id, first_name, last_name, email) {
-  const sql = `
-    UPDATE account
-       SET first_name = $1,
-           last_name  = $2,
-           email      = $3,
-           updated_at = NOW()
-     WHERE account_id = $4
-   RETURNING account_id, first_name, last_name, email, account_type
-  `;
-  const result = await pool.query(sql, [first_name, last_name, email, account_id]);
-  return result.rows[0];
-}
-
-/**
- * Create a new account (used for initial seeding / registration).
- */
+/** Create a new account. */
 export async function create(first_name, last_name, email, passwordHash, type = "Client") {
   const sql = `
-    INSERT INTO account (first_name, last_name, email, password, account_type)
-    VALUES ($1, $2, $3, $4, $5)
-    RETURNING account_id, first_name, last_name, email, account_type
+    INSERT INTO account (
+      account_firstname, 
+      account_lastname, 
+      account_email, 
+      account_password, 
+      account_type
+    ) VALUES ($1, $2, $3, $4, $5)
+    RETURNING account_id, account_firstname, account_lastname, account_email, account_type
   `;
   const result = await pool.query(sql, [first_name, last_name, email, passwordHash, type]);
   return result.rows[0];
 }
 
-/**
- * Update account info (first name, last name, email)
- * Uses parameterized query for SQL-injection protection.
- */
+/** Update account info */
 export async function updateAccountInfo(account_id, first_name, last_name, email) {
   const sql = `
     UPDATE account
-       SET first_name = $1,
-           last_name  = $2,
-           email      = $3,
+       SET account_firstname = $1,
+           account_lastname  = $2,
+           account_email     = $3,
            updated_at = NOW()
      WHERE account_id = $4
-   RETURNING account_id, first_name, last_name, email, account_type
+   RETURNING account_id, account_firstname, account_lastname, account_email, account_type
   `;
   const result = await pool.query(sql, [first_name, last_name, email, account_id]);
   return result.rows[0];
 }
 
-/**
- * Update account password (hashed)
- */
+/** Update password */
 export async function updatePassword(account_id, passwordHash) {
   const sql = `
     UPDATE account
-       SET password   = $1,
+       SET account_password = $1,
            updated_at = NOW()
      WHERE account_id = $2
    RETURNING account_id
