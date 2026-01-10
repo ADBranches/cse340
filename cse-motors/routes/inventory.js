@@ -1,6 +1,6 @@
 // routes/inventory.js
 /**
- * 🚗 CSE Motors – Inventory Routes (Phase 3 Final)
+ * CSE Motors – Inventory Routes
  * Combines role-based access control with existing image-processing logic.
  */
 

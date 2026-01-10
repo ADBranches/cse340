@@ -1,24 +1,19 @@
 // middleware/authMiddleware.js
-/**
- * 🔐 CSE Motors – Auth Middleware (Phase 3 Final)
- * Handles JWT verification, global user context, and role-based access.
- */
+// CSE Motors – Authentication and Authorization Middleware
 
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 dotenv.config();
 
 /**
- * ✅ verifyToken
+ * verifyToken
  * - Verifies JWT if present.
- * - Attaches decoded user data to req.account & res.locals.account.
- * - Clears invalid / expired tokens gracefully.
- * - Allows public pages to render even without a token.
+ * - Attaches decoded user data to req.account and res.locals.account.
+ * - Clears invalid or expired tokens without interrupting public pages.
  */
 export function verifyToken(req, res, next) {
   const token = req.cookies?.jwt;
 
-  // Allow public pages if no token
   if (!token) return next();
 
   try {
@@ -26,18 +21,17 @@ export function verifyToken(req, res, next) {
     req.account = decoded;
     res.locals.account = decoded;
   } catch (err) {
-    console.warn("JWT expired or invalid:", err.message);
+    console.warn("JWT validation error:", err.message);
     res.clearCookie("jwt");
-    // no redirect here → public pages can still load
   }
 
   next();
 }
 
 /**
- * ✅ requireAuth
- * - Forces authentication for protected routes.
- * - Redirects unauthenticated users to /account/login.
+ * requireAuth
+ * - Ensures a user is authenticated.
+ * - Redirects unauthenticated users to the login page.
  */
 export function requireAuth(req, res, next) {
   if (!req.account) {
@@ -48,13 +42,13 @@ export function requireAuth(req, res, next) {
 }
 
 /**
- * ✅ requireRole
- * - Restricts access by allowed roles (e.g., ["Admin", "Employee"])
+ * requireRole
+ * - Restricts access based on allowed roles (e.g., ["Admin", "Employee"])
  */
 export function requireRole(roles = []) {
   return (req, res, next) => {
     if (!req.account || !roles.includes(req.account.account_type)) {
-      req.flash("error", "Access denied. Authorized personnel only.");
+      req.flash("error", "Access denied.");
       return res.redirect("/account/management");
     }
     next();
@@ -62,9 +56,8 @@ export function requireRole(roles = []) {
 }
 
 /**
- * ✅ globalAuthContext
- * - Injects account info into all templates automatically.
- * - Mount near top of server.js → app.use(globalAuthContext)
+ * globalAuthContext
+ * - Makes account information available to all EJS templates.
  */
 export function globalAuthContext(req, res, next) {
   res.locals.account = req.account || null;

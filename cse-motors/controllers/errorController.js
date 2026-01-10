@@ -1,15 +1,15 @@
 /**
- * This is linked from the footer: /cause-error
+ * Linked from the footer: /cause-error
  */
 export function triggerError(req, res, next) {
   next(new Error("This is a forced error from the footer link."));
 }
 
 /**
- * Always renders the 500 error page using layout.ejs
+ * Global 500 error handler using layout.ejs
  */
 export function handleError(err, req, res, next) {
-  console.error("❌ GLOBAL ERROR:", err);
+  console.error("Global error:", err);
 
   res.status(500).render("layout", {
     title: "Server Error",

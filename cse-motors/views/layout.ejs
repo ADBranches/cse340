@@ -1,10 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <!-- ✅ Include your shared <head> partial -->
     <%- include("partials/head", { title }) %>
 
-    <!-- ✅ Load external CSS for global and auth & headerstyling -->
     <link rel="stylesheet" href="/css/auth.css">
     <link rel="stylesheet" href="/css/header.css">
     <link rel="stylesheet" href="/css/account-update.css">
@@ -13,22 +11,20 @@
 
   <body>
     <%
-      // ✅ Safe fallbacks so EJS never throws ReferenceError
       const accountSafe = typeof account !== "undefined" ? account : null;
       const isPrivilegedSafe = typeof isPrivileged !== "undefined" ? isPrivileged : false;
       const currentView = typeof view !== "undefined" ? view : "";
-      const isAuthPage = currentView.includes("account/login") || currentView.includes("account/register");
+      const isAuthPage =
+        currentView.includes("account/login") ||
+        currentView.includes("account/register");
     %>
 
-    <!-- ✅ Conditionally include header/nav for non-auth pages -->
     <% if (!isAuthPage) { %>
       <%- include("partials/header", { account: accountSafe, isPrivileged: isPrivilegedSafe }) %>
       <%- include("partials/nav", { account: accountSafe, isPrivileged: isPrivilegedSafe }) %>
     <% } %>
 
-    <!-- ✅ Main Content Wrapper -->
     <main id="main-content" class="<%= isAuthPage ? 'auth-layout' : '' %>">
-      <!-- ✅ FLASH MESSAGES -->
       <% if (messages && messages.length) { %>
         <div class="alert alert-success">
           <% messages.forEach(m => { %><p><%= m %></p><% }) %>
@@ -41,9 +37,13 @@
         </div>
       <% } %>
 
-      <!-- ✅ PAGE CONTENT -->
-      <% if (typeof view !== "undefined") { %>
-        <%- include(view) %>
+      <%
+        const pageView =
+          typeof view !== "undefined" && view ? view : "";
+      %>
+
+      <% if (pageView) { %>
+        <%- include("./" + pageView) %>
       <% } else if (typeof body !== "undefined") { %>
         <%- body %>
       <% } else { %>
@@ -51,19 +51,20 @@
       <% } %>
     </main>
 
-    <!-- ✅ Conditionally include footer -->
     <% if (!isAuthPage) { %>
       <%- include("partials/footer") %>
     <% } %>
 
-    <!-- ✅ Auto-hide flash messages -->
     <script>
       document.addEventListener("DOMContentLoaded", () => {
         setTimeout(() => {
-          document.querySelectorAll(".alert").forEach(el => (el.style.display = "none"));
+          document.querySelectorAll(".alert").forEach(el => {
+            el.style.display = "none";
+          });
         }, 4000);
       });
     </script>
+
     <% if (process.env.NODE_ENV === "development") { %>
       <script src="/js/auth-debug.js"></script>
     <% } %>

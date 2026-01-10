@@ -3,7 +3,6 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import dotenv from "dotenv";
 import pool from "../utilities/db.js";
-
 import { updateAccountInfo, updatePassword } from "../models/account-model.js";
 import { hashPassword } from "../utilities/auth-utils.js";
 
@@ -21,59 +20,53 @@ export const loginView = (req, res) => {
 
 /** Handle Login Authentication */
 export const loginAccount = async (req, res) => {
-  console.log("🔐 LOGIN ATTEMPT STARTED");
-  console.log("📧 Email:", req.body.email);
-  console.log("🔑 Password length:", req.body.password?.length);
+  console.log("Login attempt started");
+  console.log("Email:", req.body.email);
 
   try {
-    // 1. Database query
-    console.log("🔍 Querying database...");
+    const isAjax =
+      req.xhr ||
+      (req.headers["x-requested-with"] &&
+        req.headers["x-requested-with"].toLowerCase() === "xmlhttprequest") ||
+      (req.headers.accept && req.headers.accept.includes("application/json"));
+
+    // Find user
     const userQuery = await pool.query(
       "SELECT * FROM account WHERE account_email = $1",
       [req.body.email]
     );
 
-    console.log("📊 Query results:", userQuery.rows.length);
-
     if (userQuery.rows.length === 0) {
-      console.warn("❌ No user found:", req.body.email);
       if (isAjax) {
         return res.status(401).json({
           success: false,
-          message: "No user found with that email.",
+          message: "No user found with that email."
         });
       }
       req.flash("error", "No account found with that email.");
       return res.redirect("/account/login");
     }
 
-
     const user = userQuery.rows[0];
-    console.log("✅ User found:", user.account_email);
-    console.log("👤 User type:", user.account_type);
 
-    // 2. bcrypt compare
-    console.log("🔑 Comparing password with bcrypt...");
+    // Compare password
     const validPassword = await bcrypt.compare(
       req.body.password,
       user.account_password
     );
-    console.log("🔑 Password valid?", validPassword);
 
     if (!validPassword) {
-      console.warn("❌ Invalid password for:", req.body.email);
       if (isAjax) {
         return res.status(403).json({
           success: false,
-          message: "Incorrect password.",
+          message: "Incorrect password."
         });
       }
       req.flash("error", "Incorrect password.");
       return res.redirect("/account/login");
     }
 
-    // 3. Create JWT
-    console.log("🎫 Creating JWT...");
+    // Create JWT
     const tokenPayload = {
       account_id: user.account_id,
       account_firstname: user.account_firstname,
@@ -87,9 +80,7 @@ export const loginAccount = async (req, res) => {
       { expiresIn: "2h" }
     );
 
-    console.log("✅ JWT created");
-
-    // 4. Set cookie and redirect
+    // Set cookie and redirect
     res.cookie("jwt", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
@@ -99,15 +90,14 @@ export const loginAccount = async (req, res) => {
     if (isAjax) {
       return res.json({
         success: true,
-        message: "Login successful.",
+        message: "Login successful."
       });
     }
 
-    req.flash("notice", `Welcome back, ${user.account_firstname}!`);
-    console.log("🔄 Redirecting to /account/management");
+    req.flash("notice", `Welcome back, ${user.account_firstname}.`);
     return res.redirect("/account/management");
   } catch (error) {
-    console.error("💥 LOGIN ERROR:", error);
+    console.error("Login error:", error);
     if (isAjax) {
       return res
         .status(500)
@@ -115,22 +105,21 @@ export const loginAccount = async (req, res) => {
     }
     req.flash("error", "Login failed. Please try again.");
     return res.redirect("/account/login");
+  }
+};
 
-      }
-    };
-
-/** Logout – Clear JWT cookie */
+/** Logout */
 export const logoutAccount = (req, res) => {
-  console.log("🚪 Logout requested");
   res.clearCookie("jwt");
   req.flash("notice", "Logged out successfully");
   res.redirect("/");
 };
 
-/** Render Account Management Page (Enhanced for Phase 3) */
+/** Render Account Management Page */
 export const managementView = async (req, res) => {
   try {
     const user = req.user || req.account;
+
     if (!user) {
       req.flash("error", "Please log in to access your dashboard.");
       return res.redirect("/account/login");
@@ -158,7 +147,7 @@ export const managementView = async (req, res) => {
       errors: req.flash("error")
     });
   } catch (err) {
-    console.error("⚠️ managementView error:", err);
+    console.error("managementView error:", err);
     req.flash("error", "Unexpected error loading your dashboard.");
     res.redirect("/account/login");
   }
@@ -195,7 +184,7 @@ export const updateView = async (req, res) => {
       messages: req.flash("notice")
     });
   } catch (err) {
-    console.error("❌ Update view error:", err);
+    console.error("Update view error:", err);
     req.flash("error", "Unable to load update form");
     res.redirect("/account/management");
   }
@@ -204,7 +193,9 @@ export const updateView = async (req, res) => {
 /** Handle Account Update */
 export const updateAccount = async (req, res) => {
   try {
-    const { account_firstname, account_lastname, account_email, account_id } = req.body;
+    const { account_firstname, account_lastname, account_email, account_id } =
+      req.body;
+
     const user = req.user || req.account;
 
     if (parseInt(account_id) !== user.account_id) {
@@ -232,16 +223,16 @@ export const updateAccount = async (req, res) => {
       [account_firstname, account_lastname, account_email, account_id]
     );
 
-    req.flash("notice", "Account updated successfully!");
+    req.flash("notice", "Account updated successfully");
     res.redirect("/account/management");
   } catch (err) {
-    console.error("❌ Update account error:", err);
+    console.error("Update account error:", err);
     req.flash("error", "Unable to update account");
     res.redirect(`/account/update/${req.body.account_id}`);
   }
 };
 
-/** Handle Password Change (Legacy Form Endpoint) */
+/** Handle Password Change (Legacy Endpoint) */
 export const updatePasswordController = async (req, res) => {
   try {
     const { new_password, account_id } = req.body;
@@ -261,23 +252,23 @@ export const updatePasswordController = async (req, res) => {
     const hashedPassword = await bcrypt.hash(new_password, salt);
 
     await pool.query(
-      `UPDATE account 
+      `UPDATE account
        SET account_password = $1,
            updated_at = NOW()
        WHERE account_id = $2`,
       [hashedPassword, account_id]
     );
 
-    req.flash("notice", "Password updated successfully!");
+    req.flash("notice", "Password updated successfully");
     res.redirect("/account/management");
   } catch (err) {
-    console.error("❌ Update password error:", err);
+    console.error("Update password error:", err);
     req.flash("error", "Unable to update password");
     res.redirect(`/account/update/${req.body.account_id}`);
   }
 };
 
-/** Register View (if needed) */
+/** Register View */
 export const registerView = (req, res) => {
   res.render("layout", {
     title: "Register - CSE Motors",
@@ -290,7 +281,8 @@ export const registerView = (req, res) => {
 /** Handle Registration */
 export const registerAccount = async (req, res) => {
   try {
-    const { first_name, last_name, email, password, confirm_password } = req.body;
+    const { first_name, last_name, email, password, confirm_password } =
+      req.body;
 
     if (password !== confirm_password) {
       req.flash("error", "Passwords do not match");
@@ -317,38 +309,32 @@ export const registerAccount = async (req, res) => {
       [first_name, last_name, email, hashedPassword]
     );
 
-    req.flash("notice", "Registration successful! Please login.");
+    req.flash("notice", "Registration successful. Please login.");
     res.redirect("/account/login");
   } catch (err) {
-    console.error("❌ Registration error:", err);
+    console.error("Registration error:", err);
     req.flash("error", "Registration failed");
     res.redirect("/account/register");
   }
 };
 
-/** Process personal info update (Phase 5 Enhanced) */
+/** Process Personal Info Update (Enhanced) */
 export const processAccountUpdate = async (req, res) => {
   const { first_name, last_name, email } = req.body;
   const { account_id } = req.account;
 
   try {
-    const isAjax =
-      req.xhr ||
-      (req.headers["x-requested-with"] &&
-        req.headers["x-requested-with"].toLowerCase() === "xmlhttprequest") ||
-      (req.headers.accept && req.headers.accept.includes("application/json"));
-
     await updateAccountInfo(account_id, first_name, last_name, email);
     req.flash("notice", "Account information updated successfully.");
     res.redirect(`/account/update/${account_id}`);
   } catch (err) {
-    console.error("⚠️ Account info update failed:", err);
+    console.error("Account info update failed:", err);
     req.flash("error", "Could not update account information.");
     res.redirect(`/account/update/${account_id}`);
   }
 };
 
-/** Process password change (Phase 5 Enhanced) */
+/** Process Password Change (Enhanced) */
 export const processPasswordChange = async (req, res) => {
   const { password } = req.body;
   const { account_id } = req.account;
@@ -359,7 +345,7 @@ export const processPasswordChange = async (req, res) => {
     req.flash("notice", "Password updated successfully.");
     res.redirect(`/account/update/${account_id}`);
   } catch (err) {
-    console.error("⚠️ Password update failed:", err);
+    console.error("Password update failed:", err);
     req.flash("error", "Could not update password.");
     res.redirect(`/account/update/${account_id}`);
   }

@@ -74,6 +74,7 @@ export function buildManagementView(req, res) {
 // =============================
 export function buildAddClassification(req, res) {
   const nav = req.app.locals.utils.getNav();
+
   if (!req.account || !["Admin", "Employee"].includes(req.account.account_type)) {
     req.flash("error", "Access denied: Admin or Employee role required.");
     return res.redirect("/account/management");
@@ -93,6 +94,7 @@ export function buildAddClassification(req, res) {
 // =============================
 export async function addClassification(req, res) {
   const { classification_name } = req.body;
+
   if (!req.account || !["Admin", "Employee"].includes(req.account.account_type)) {
     req.flash("error", "Access denied: Admin or Employee role required.");
     return res.redirect("/account/management");
@@ -113,7 +115,6 @@ export async function addClassification(req, res) {
         messages: req.flash("notice")
       });
     }
-
   } catch (err) {
     console.error("Add Classification Error:", err);
     const nav = req.app.locals.utils.getNav();
@@ -142,7 +143,6 @@ export async function addClassification(req, res) {
 // ADD INVENTORY VIEW
 // =============================
 export async function buildAddInventory(req, res) {
-  // Inline Authorization Check
   if (!req.account || !["Admin", "Employee"].includes(req.account.account_type)) {
     req.flash("error", "Access denied: Admin or Employee role required.");
     return res.redirect("/account/management");
@@ -151,7 +151,6 @@ export async function buildAddInventory(req, res) {
   try {
     const classifications = await invModel.getClassifications();
     const nav = req.app.locals.utils.getNav();
-
     const classificationList = buildClassificationSelect(classifications);
 
     res.render("layout", {
@@ -161,8 +160,6 @@ export async function buildAddInventory(req, res) {
       classificationList,
       errors: null,
       messages: req.flash("notice"),
-
-      // DEFAULT VALUES FOR THE FORM FIELDS
       inv_make: "",
       inv_model: "",
       inv_year: "",
@@ -172,11 +169,10 @@ export async function buildAddInventory(req, res) {
       inv_price: "",
       inv_miles: "",
       inv_color: "",
-      classification_id: "",
+      classification_id: ""
     });
-
   } catch (err) {
-    console.error("❌ Error loading Add Inventory page:", err);
+    console.error("Error loading Add Inventory page:", err);
     res.status(500).render("layout", {
       title: "Server Error",
       view: "errors/500",
@@ -192,7 +188,7 @@ export async function addInventory(req, res) {
   if (!req.account || !["Admin", "Employee"].includes(req.account.account_type)) {
     req.flash("error", "Access denied: Admin or Employee role required.");
     return res.redirect("/account/management");
-  } 
+  }
 
   try {
     const saved = await invModel.addInventory(req.body);
@@ -204,9 +200,8 @@ export async function addInventory(req, res) {
 
     req.flash("notice", "Failed to add inventory item.");
     return res.redirect("/inv/add-inventory");
-
   } catch (err) {
-    console.error("❌ Error saving inventory:", err);
+    console.error("Error saving inventory:", err);
 
     const classifications = await invModel.getClassifications();
     const nav = req.app.locals.utils.getNav();
@@ -224,6 +219,7 @@ export async function addInventory(req, res) {
     });
   }
 }
+
 // =============================
 // EDIT INVENTORY VIEW
 // =============================
@@ -238,7 +234,10 @@ export async function editInventoryView(req, res) {
     const vehicle = await invModel.getInventoryById(invId);
     const classifications = await invModel.getClassifications();
     const nav = req.app.locals.utils.getNav();
-    const classificationList = buildClassificationSelect(classifications, vehicle.classification_id);
+    const classificationList = buildClassificationSelect(
+      classifications,
+      vehicle.classification_id
+    );
 
     if (!vehicle) {
       req.flash("error", "Vehicle not found.");
@@ -255,7 +254,7 @@ export async function editInventoryView(req, res) {
       messages: req.flash("notice")
     });
   } catch (err) {
-    console.error("❌ Edit Inventory View Error:", err);
+    console.error("Edit Inventory View Error:", err);
     res.status(500).render("layout", {
       title: "Server Error",
       view: "errors/500",
@@ -284,7 +283,7 @@ export async function updateInventory(req, res) {
     req.flash("error", "Failed to update inventory item.");
     res.redirect(`/inv/edit/${req.body.inv_id}`);
   } catch (err) {
-    console.error("❌ Update Inventory Error:", err);
+    console.error("Update Inventory Error:", err);
     req.flash("error", "Unexpected server error while updating inventory.");
     res.redirect(`/inv/edit/${req.body.inv_id}`);
   }
@@ -318,7 +317,7 @@ export async function deleteInventoryView(req, res) {
       messages: req.flash("notice")
     });
   } catch (err) {
-    console.error("❌ Delete View Error:", err);
+    console.error("Delete View Error:", err);
     res.status(500).render("layout", {
       title: "Server Error",
       view: "errors/500",
@@ -347,9 +346,8 @@ export async function deleteInventory(req, res) {
     req.flash("error", "Failed to delete inventory item.");
     res.redirect("/inv/");
   } catch (err) {
-    console.error("❌ Delete Inventory Error:", err);
+    console.error("Delete Inventory Error:", err);
     req.flash("error", "Unexpected server error while deleting inventory.");
     res.redirect("/inv/");
   }
 }
-

@@ -3,7 +3,7 @@
     <h2 id="vehicle-name">
       <%= vehicle.year %> <%= vehicle.make %> <%= vehicle.model %>
     </h2>
-    <p>Explore specifications, features, and pricing.</p>
+    <p>Vehicle specifications and details.</p>
   </header>
 
   <div class="vehicle-details__layout">
@@ -21,7 +21,6 @@
     <div class="vehicle-details__info">
       <h3><%= vehicle.year %> <%= vehicle.make %> <%= vehicle.model %></h3>
 
-      <!-- ⭐ FORMATTED PRICE -->
       <% if (vehicle.price) { %>
         <p><strong>Price:</strong> <%= utils.formatPrice(vehicle.price) %></p>
       <% } %>
@@ -30,7 +29,6 @@
         <p><strong>Color:</strong> <%= vehicle.color %></p>
       <% } %>
 
-      <!-- ⭐ FORMATTED MILES -->
       <% if (vehicle.miles) { %>
         <p><strong>Mileage:</strong> <%= utils.formatMiles(vehicle.miles) %></p>
       <% } %>
@@ -38,13 +36,13 @@
       <p class="description"><%= vehicle.description %></p>
 
       <ul>
-        <li>Smooth engine performance</li>
-        <li>High fuel efficiency</li>
-        <li>Premium comfort interior</li>
-        <li>Advanced safety suite</li>
+        <li>Engine performance</li>
+        <li>Fuel efficiency</li>
+        <li>Interior features</li>
+        <li>Safety features</li>
       </ul>
       
-      <a href="/inventory" class="btn-secondary">← Back to Inventory</a>
+      <a href="/inventory" class="btn-secondary">Back to Inventory</a>
     </div>
   </div>
 </section>

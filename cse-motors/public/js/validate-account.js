@@ -13,17 +13,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const checkEmail = () => {
       const email = emailInput.value.trim();
-      const valid = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email);
-      emailHint.textContent = valid ? "✅ Valid email address" : "❌ Enter a valid email format";
+      const valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+      emailHint.textContent = valid
+        ? "Valid email format"
+        : "Enter a valid email address";
       emailHint.style.color = valid ? "#046c3a" : "#a30000";
     };
 
     emailInput.addEventListener("input", checkEmail);
 
     infoForm.addEventListener("submit", (e) => {
-      if (!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(emailInput.value.trim())) {
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput.value.trim())) {
         e.preventDefault();
-        emailHint.textContent = "❌ Please enter a valid email.";
+        emailHint.textContent = "Please enter a valid email address.";
         emailHint.style.color = "#a30000";
       }
     });
@@ -41,43 +43,46 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const validatePassword = () => {
       const pwd = pwdInput.value;
+
       const rules = [
-        { test: pwd.length >= 8, msg: "≥ 8 characters" },
-        { test: /[A-Z]/.test(pwd), msg: "uppercase letter" },
-        { test: /[a-z]/.test(pwd), msg: "lowercase letter" },
-        { test: /[0-9]/.test(pwd), msg: "number" },
-        { test: /[@$!%*?&]/.test(pwd), msg: "special character" },
+        { test: pwd.length >= 8, msg: "At least 8 characters" },
+        { test: /[A-Z]/.test(pwd), msg: "Contains an uppercase letter" },
+        { test: /[a-z]/.test(pwd), msg: "Contains a lowercase letter" },
+        { test: /[0-9]/.test(pwd), msg: "Contains a number" },
+        { test: /[@$!%*?&]/.test(pwd), msg: "Contains a special character" }
       ];
 
       hint.innerHTML = rules
         .map(
           (r) =>
-            `<span class="${r.test ? "ok" : "fail"}">${r.test ? "✅" : "❌"} ${r.msg}</span>`
+            `<span class="${r.test ? "ok" : "fail"}">${r.msg}</span>`
         )
-        .join(" ");
+        .join(" | ");
     };
 
     pwdInput.addEventListener("input", validatePassword);
 
     confirmInput.addEventListener("input", () => {
       confirmInput.setCustomValidity(
-        confirmInput.value === pwdInput.value ? "" : "Passwords must match"
+        confirmInput.value === pwdInput.value ? "" : "Passwords do not match"
       );
     });
 
     pwdForm.addEventListener("submit", (e) => {
       const pwd = pwdInput.value;
       const confirm = confirmInput.value;
-      if (
-        pwd.length < 8 ||
-        !/[A-Z]/.test(pwd) ||
-        !/[a-z]/.test(pwd) ||
-        !/[0-9]/.test(pwd) ||
-        !/[@$!%*?&]/.test(pwd) ||
-        pwd !== confirm
-      ) {
+
+      const valid =
+        pwd.length >= 8 &&
+        /[A-Z]/.test(pwd) &&
+        /[a-z]/.test(pwd) &&
+        /[0-9]/.test(pwd) &&
+        /[@$!%*?&]/.test(pwd) &&
+        pwd === confirm;
+
+      if (!valid) {
         e.preventDefault();
-        alert("⚠️ Please meet all password requirements before submitting.");
+        alert("Please ensure the password meets all requirements before submitting.");
       }
     });
   }

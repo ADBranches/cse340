@@ -26,7 +26,7 @@ import { verifyToken } from "../middleware/authMiddleware.js";
 const router = express.Router();
 
 /* ================================
-   🟢 PUBLIC ROUTES
+    PUBLIC ROUTES
 ================================ */
 router.get("/login", loginView);
 router.post("/login", loginAccount);
@@ -35,7 +35,7 @@ router.get("/register", registerView);
 router.post("/register", registerAccount);
 
 /* ================================
-   🔒 PROTECTED ROUTES (JWT required)
+    PROTECTED ROUTES (JWT required)
 ================================ */
 
 // Dashboard (Account Management)
