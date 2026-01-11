@@ -1,0 +1,105 @@
+<%- include('../partials/head') %>
+<%- include('../partials/alerts') %>
+
+<main class="auth-wrapper">
+  <section class="auth-card">
+    <h1 class="auth-title">Login to CSE Motors</h1>
+
+    <div id="status-box" class="alert hidden"></div>
+
+    <form id="login-form" method="POST" action="/account/login" class="auth-form">
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input
+          id="email"
+          type="email"
+          name="email"
+          placeholder="user@example.com"
+          required
+          autocomplete="email"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input
+          id="password"
+          type="password"
+          name="password"
+          placeholder="********"
+          required
+          autocomplete="current-password"
+        />
+      </div>
+
+      <button type="submit" class="btn-primary w-full mt-4">Login</button>
+    </form>
+
+    <p class="register-text mt-4 text-center">
+      Don’t have an account?
+      <a href="/account/register" class="text-purple-700 hover:underline">Register here</a>
+    </p>
+  </section>
+</main>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const form = document.getElementById("login-form");
+  const statusBox = document.getElementById("status-box");
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    statusBox.className = "alert alert-info";
+    statusBox.textContent = "⏳ Attempting login...";
+    statusBox.classList.remove("hidden");
+
+    try {
+      const formData = new FormData(form);
+      const res = await fetch(form.action, {
+        method: form.method,
+        headers: {
+          "Accept": "application/json"
+        },
+        body: formData,
+        redirect: "manual" // 👈 prevent automatic redirect
+      });
+
+      console.log("📡 Raw response:", res.status, res.type);
+
+      // Try parsing JSON only if possible
+      let data = {};
+      try {
+        data = await res.json();
+      } catch {
+        console.warn("⚠️ Non-JSON response (likely HTML redirect)");
+      }
+
+      if (res.status === 200 && data.success) {
+        statusBox.className = "alert alert-success";
+        statusBox.textContent = "✅ Login successful. Redirecting...";
+        setTimeout(() => (window.location.href = "/account/management"), 1000);
+      } else if (res.status === 401) {
+        statusBox.className = "alert alert-error";
+        statusBox.textContent = data.message || "⚠️ No user found with that email.";
+      } else if (res.status === 403) {
+        statusBox.className = "alert alert-error";
+        statusBox.textContent = data.message || "⚠️ Incorrect password.";
+      } else if (res.status >= 500) {
+        statusBox.className = "alert alert-error";
+        statusBox.textContent = data.message || "💥 Server error during login.";
+      } else if (res.type === "opaqueredirect" || res.status === 0) {
+        // Happens if Express redirected (HTML)
+        statusBox.className = "alert alert-error";
+        statusBox.textContent = "⚠️ Invalid credentials — check your email or password.";
+      } else {
+        statusBox.className = "alert alert-error";
+        statusBox.textContent = data.message || "⚠️ Unexpected response.";
+      }
+    } catch (err) {
+      console.error("🚨 Network error:", err);
+      statusBox.className = "alert alert-error";
+      statusBox.textContent = "💥 Network or server not reachable.";
+    }
+  });
+});
+</script>

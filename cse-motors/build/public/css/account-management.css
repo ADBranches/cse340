@@ -1,0 +1,90 @@
+/* ===============================
+   Account Management Page Styles
+   =============================== */
+
+.management-page {
+  min-height: 100vh;
+  background-color: #f9f9fc;
+  padding: 3rem 1.5rem;
+  display: flex;
+  justify-content: center;
+}
+
+.management-container {
+  background: #fff;
+  border-radius: 12px;
+  padding: 2rem 2.5rem;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+  max-width: 750px;
+  width: 100%;
+  font-family: "Inter", "Segoe UI", Roboto, sans-serif;
+}
+
+.management-container h1 {
+  color: #2c006b;
+  text-align: center;
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+}
+
+.management-container p {
+  color: #444;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.management-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.management-actions a {
+  display: inline-block;
+  padding: 0.9rem 1.2rem;
+  text-align: center;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.25s ease;
+  text-decoration: none;
+}
+
+/* Primary button */
+.management-actions .btn-primary {
+  background: linear-gradient(135deg, #2c006b, #5200cc);
+  color: white;
+  box-shadow: 0 4px 10px rgba(82, 0, 204, 0.3);
+}
+.management-actions .btn-primary:hover {
+  background: linear-gradient(135deg, #3a0096, #6d00ff);
+  transform: translateY(-1px);
+}
+
+/* Secondary button */
+.management-actions .btn-secondary {
+  background: #f4f4f4;
+  color: #333;
+  border: 1px solid #ccc;
+}
+.management-actions .btn-secondary:hover {
+  background: #ececec;
+}
+
+/* Logout button */
+.management-actions .btn-logout {
+  background: #fff1f1;
+  color: #a30000;
+  border: 1px solid #ffbdbd;
+}
+.management-actions .btn-logout:hover {
+  background: #ffe5e5;
+}
+
+@media (max-width: 640px) {
+  .management-container {
+    padding: 1.5rem;
+  }
+  .management-container h1 {
+    font-size: 1.4rem;
+  }
+}

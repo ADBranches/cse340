@@ -1,0 +1,66 @@
+<%- include('../partials/head') %>
+
+<main class="update-page">
+  <section class="update-card">
+    <% if (errors && errors.length) { %>
+      <div class="alert alert-error"><%= errors.join('<br>') %></div>
+    <% } %>
+
+    <% if (messages && messages.length) { %>
+      <div class="alert alert-success"><%= messages.join('<br>') %></div>
+    <% } %>
+
+    <h1>Update Your Account</h1>
+
+    <div class="flash-container">
+    <% if (errors && errors.length) { %>
+        <div class="flash flash-error">
+        <i class="fas fa-exclamation-circle"></i>
+        <span><%= errors.join('<br>') %></span>
+        <a href="#" class="flash-close" onclick="this.parentElement.remove()">×</a>
+        </div>
+    <% } %>
+
+    <% if (messages && messages.length) { %>
+        <div class="flash flash-success">
+        <i class="fas fa-check-circle"></i>
+        <span><%= messages.join('<br>') %></span>
+        <a href="#" class="flash-close" onclick="this.parentElement.remove()">×</a>
+        </div>
+    <% } %>
+    </div>
+
+    <!-- Personal Info Update -->
+    <h2>Update Personal Information</h2>
+    <form id="update-info-form" action="/account/update" method="POST">
+      <label>First Name</label>
+      <input type="text" name="first_name" value="<%= account.first_name %>" required>
+
+      <label>Last Name</label>
+      <input type="text" name="last_name" value="<%= account.last_name %>" required>
+
+      <label>Email</label>
+      <input type="email" name="email" value="<%= account.email %>" required>
+
+      <button type="submit" class="btn-primary">Save Changes</button>
+    </form>
+
+    <!-- Password Update -->
+    <h2>Change Password</h2>
+    <p class="password-hint">
+      Password must contain at least 8 characters, including uppercase, lowercase, number, and special character.
+    </p>
+    <form id="password-form" action="/account/update-password" method="POST">
+      <label>New Password</label>
+      <input type="password" name="password" required>
+
+      <label>Confirm Password</label>
+      <input type="password" name="confirm_password" required>
+
+      <button type="submit" class="btn-secondary">Update Password</button>
+    </form>
+
+    <a href="/account/management" class="btn-logout">← Back to Dashboard</a>
+  </section>
+  <script src="/js/validate-account.js"></script>
+</main>

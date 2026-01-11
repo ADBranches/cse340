@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include("partials/head", { title }) %>
+
+    <link rel="stylesheet" href="/css/auth.css">
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/account-update.css">
+    <link rel="stylesheet" href="/css/account-management.css">
+  </head>
+
+  <body>
+    <%
+      const accountSafe = typeof account !== "undefined" ? account : null;
+      const isPrivilegedSafe = typeof isPrivileged !== "undefined" ? isPrivileged : false;
+      const currentView = typeof view !== "undefined" ? view : "";
+      const isAuthPage =
+        currentView.includes("account/login") ||
+        currentView.includes("account/register");
+    %>
+
+    <% if (!isAuthPage) { %>
+      <%- include("partials/header", { account: accountSafe, isPrivileged: isPrivilegedSafe }) %>
+      <%- include("partials/nav", { account: accountSafe, isPrivileged: isPrivilegedSafe }) %>
+    <% } %>
+
+    <main id="main-content" class="<%= isAuthPage ? 'auth-layout' : '' %>">
+      <% if (messages && messages.length) { %>
+        <div class="alert alert-success">
+          <% messages.forEach(m => { %><p><%= m %></p><% }) %>
+        </div>
+      <% } %>
+
+      <% if (errors && errors.length) { %>
+        <div class="alert alert-danger">
+          <% errors.forEach(e => { %><p><%= e.msg || e %></p><% }) %>
+        </div>
+      <% } %>
+
+      <%
+        const pageView =
+          typeof view !== "undefined" && view ? view : "";
+      %>
+
+      <% if (pageView) { %>
+        <%- include("./" + pageView) %>
+      <% } else if (typeof body !== "undefined") { %>
+        <%- body %>
+      <% } else { %>
+        <p>Error: No content provided for this page.</p>
+      <% } %>
+    </main>
+
+    <% if (!isAuthPage) { %>
+      <%- include("partials/footer") %>
+    <% } %>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        setTimeout(() => {
+          document.querySelectorAll(".alert").forEach(el => {
+            el.style.display = "none";
+          });
+        }, 4000);
+      });
+    </script>
+
+    <% if (process.env.NODE_ENV === "development") { %>
+      <script src="/js/auth-debug.js"></script>
+    <% } %>
+    
+  </body>
+</html>

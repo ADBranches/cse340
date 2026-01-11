@@ -1,0 +1,105 @@
+<section class="form-wrapper">
+  <h1 class="page-title">Add New Classification</h1>
+
+  <% if (messages && messages.length) { %>
+    <div class="alert alert-success">
+      <%= messages %>
+    </div>
+  <% } %>
+
+  <% if (errors && errors.length) { %>
+    <div class="alert alert-danger">
+      <% errors.forEach(err => { %>
+        <p><%= err.msg %></p>
+      <% }) %>
+    </div>
+  <% } %>
+
+  <form action="/inv/add-classification" method="POST" class="styled-form">
+    <div class="form-group">
+      <label for="classification_name">Classification Name</label>
+      <input 
+        type="text" 
+        id="classification_name" 
+        name="classification_name"
+        placeholder="e.g., Sedan"
+        required
+        pattern="[A-Za-z]+"
+      />
+    </div>
+
+    <button type="submit" class="btn-primary-lg">
+      Save Classification
+    </button>
+  </form>
+</section>
+
+<style>
+  .form-wrapper {
+    max-width: 520px;
+    margin: 2rem auto;
+    background: #fff;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+  }
+
+  .page-title {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+  }
+
+  .form-group {
+    margin-bottom: 1.3rem;
+    display: flex;
+    flex-direction: column;
+  }
+
+  label {
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+  }
+
+  input {
+    padding: 0.7rem;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+  }
+
+  .btn-primary-lg {
+    background: #4B0082;
+    color: white;
+    padding: 0.9rem 1.8rem;
+    border: none;
+    width: 100%;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    font-weight: 600;
+    transition: 0.2s ease;
+  }
+
+  .btn-primary-lg:hover {
+    background: #36005e;
+  }
+
+  .alert {
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    font-size: 0.95rem;
+  }
+
+  .alert-danger {
+    background: #ffefef;
+    color: #b30000;
+    border: 1px solid #ffb3b3;
+  }
+
+  .alert-success {
+    background: #eaffea;
+    color: #006600;
+    border: 1px solid #8fdd8f;
+  }
+</style>

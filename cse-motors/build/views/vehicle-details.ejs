@@ -1,0 +1,48 @@
+<section class="vehicle-details" aria-labelledby="vehicle-name">
+  <header class="section-header">
+    <h2 id="vehicle-name">
+      <%= vehicle.year %> <%= vehicle.make %> <%= vehicle.model %>
+    </h2>
+    <p>Vehicle specifications and details.</p>
+  </header>
+
+  <div class="vehicle-details__layout">
+
+    <!-- IMAGE -->
+    <figure class="vehicle-details__image">
+      <img 
+        src="<%= vehicle.image || '/images/placeholder-car.svg' %>"
+        alt="<%= vehicle.year %> <%= vehicle.make %> <%= vehicle.model %>"
+        loading="lazy"
+      />
+    </figure>
+
+    <!-- RIGHT COLUMN -->
+    <div class="vehicle-details__info">
+      <h3><%= vehicle.year %> <%= vehicle.make %> <%= vehicle.model %></h3>
+
+      <% if (vehicle.price) { %>
+        <p><strong>Price:</strong> <%= utils.formatPrice(vehicle.price) %></p>
+      <% } %>
+
+      <% if (vehicle.color) { %>
+        <p><strong>Color:</strong> <%= vehicle.color %></p>
+      <% } %>
+
+      <% if (vehicle.miles) { %>
+        <p><strong>Mileage:</strong> <%= utils.formatMiles(vehicle.miles) %></p>
+      <% } %>
+
+      <p class="description"><%= vehicle.description %></p>
+
+      <ul>
+        <li>Engine performance</li>
+        <li>Fuel efficiency</li>
+        <li>Interior features</li>
+        <li>Safety features</li>
+      </ul>
+      
+      <a href="/inventory" class="btn-secondary">Back to Inventory</a>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,135 @@
+<section class="form-wrapper">
+  <h1 class="page-title">Add New Inventory Item</h1>
+
+  <% if (messages && messages.length) { %>
+    <div class="alert alert-success"><%= messages %></div>
+  <% } %>
+
+  <% if (errors && errors.length > 0) { %>
+    <div class="alert alert-danger">
+      <% errors.forEach(err => { %>
+        <p><%= err.msg %></p>
+      <% }) %>
+    </div>
+  <% } %>
+
+  <form action="/inv/add-inventory" method="POST" class="styled-form" enctype="multipart/form-data">
+
+    <%- classificationList %>
+
+    <div class="form-group">
+      <label for="inv_make">Make</label>
+      <input type="text" id="inv_make" name="inv_make" value="<%= inv_make || '' %>" required />
+    </div>
+
+    <div class="form-group">
+      <label for="inv_model">Model</label>
+      <input type="text" id="inv_model" name="inv_model" value="<%= inv_model || '' %>" required />
+    </div>
+
+    <div class="form-group">
+      <label for="inv_year">Year</label>
+      <input type="number" id="inv_year" name="inv_year" min="1900" value="<%= inv_year || '' %>" required />
+    </div>
+
+    <div class="form-group">
+      <label for="inv_price">Price</label>
+      <input type="number" id="inv_price" name="inv_price" step="0.01" value="<%= inv_price || '' %>" required />
+    </div>
+
+    <div class="form-group">
+      <label for="inv_miles">Miles</label>
+      <input type="number" id="inv_miles" name="inv_miles" value="<%= inv_miles || '' %>" required />
+    </div>
+
+    <div class="form-group">
+      <label for="inv_color">Color</label>
+      <input type="text" id="inv_color" name="inv_color" value="<%= inv_color || '' %>" required />
+    </div>
+
+    <div class="form-group">
+      <label for="inv_description">Description</label>
+      <textarea id="inv_description" name="inv_description" required><%= inv_description || '' %></textarea>
+    </div>
+
+    <!-- VEHICLE IMAGE UPLOAD -->
+    <!-- <div class="form-group">
+      <label>Vehicle Image</label>
+
+      <div class="dropzone" id="imageDropzone">
+        <p>Drag & drop image here, or click to select</p>
+        <img id="imagePreview" class="preview-img" style="display:none;" />
+      </div> -->
+
+      <!-- Hidden field to store Base64 -->
+      <!-- <input type="hidden" id="inv_image" name="inv_image" value="<%= inv_image || '' %>" required />
+      </div> -->
+
+    <!-- THUMBNAIL IMAGE UPLOAD -->
+    <!-- <div class="form-group">
+      <label>Thumbnail Image</label>
+
+      <div class="dropzone" id="thumbDropzone">
+        <p>Drag & drop thumbnail here, or click to select</p>
+        <img id="thumbPreview" class="preview-img" style="display:none;" />
+      </div> -->
+
+      <!-- Hidden field to store Base64 -->
+      <!-- <input type="hidden" id="inv_thumbnail" name="inv_thumbnail" value="<%= inv_thumbnail || '' %>" required />
+    </div> -->
+    <!-- =====================
+     IMAGE UPLOAD FIELDS
+    ===================== -->
+    <div class="form-group">
+      <label for="image_file">Vehicle Image (JPG/PNG/WEBP)</label>
+      <input type="file" id="image_file" name="image_file" accept="image/*" required />
+    </div>
+
+    <div class="form-group">
+      <label for="thumb_file">Thumbnail Image (JPG/PNG/WEBP)</label>
+      <input type="file" id="thumb_file" name="thumb_file" accept="image/*" required />
+    </div>
+
+    <button class="btn-primary-lg" type="submit">Save Inventory Item</button>
+  </>
+</section>
+
+<style>
+  .form-wrapper {
+    max-width: 680px;
+    margin: 2rem auto;
+    background: #fff;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+  }
+  .page-title {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+  }
+  .form-group { margin-bottom: 1.2rem; display: flex; flex-direction: column; }
+  label { font-weight: 600; margin-bottom: 0.4rem; }
+  input, textarea, select {
+    padding: 0.7rem;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+  }
+  textarea { min-height: 120px; }
+  .btn-primary-lg {
+    margin-top: 1rem;
+    background: #4B0082;
+    color: #fff;
+    padding: 1rem;
+    font-size: 1.1rem;
+    border: none;
+    width: 100%;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: .2s ease;
+  }
+  .btn-primary-lg:hover { background: #36006d; }
+  .alert { padding: .9rem; border-radius: 8px; margin-bottom: 1rem; }
+  .alert-danger { background: #ffe6e6; border: 1px solid #ffb3b3; color: #a30000; }
+  .alert-success { background: #eaffea; border: 1px solid #8fd88f; color: #006600; }
+</style>
