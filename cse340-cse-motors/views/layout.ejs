@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <% include partials/head %>
+    <%- include('partials/head') %>
   </head>
   <body class="page">
     <header class="page-header">
-      <% include partials/header %>
-      <% include partials/nav %>
+      <%- include('partials/header') %>
+      <%- include('partials/nav') %>
     </header>
 
     <main id="main-content" class="page-main">
@@ -14,8 +14,7 @@
     </main>
 
     <footer class="page-footer">
-      <% include partials/footer %>
+      <%- include('partials/footer') %>
     </footer>
   </body>
 </html>
-
