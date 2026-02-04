@@ -8,7 +8,9 @@
   content="CSE Motors offers quality vehicles, classic restorations, and custom Delorean upgrades."
 />
 
-<title><%= title || "CSE Motors" %></title>
+<title>
+  <%= title ? `${title} | CSE Motors` : "CSE Motors | Classic & Custom Vehicles" %>
+</title>
 
 <link
   rel="icon"
