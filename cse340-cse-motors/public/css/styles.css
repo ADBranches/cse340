@@ -1,0 +1,339 @@
+/******* Global Reset & Box Model ***************/
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/******* Base Styles (Mobile First) ***************/
+:root {
+  --color-bg: #f5f5f7;
+  --color-surface: #ffffff;
+  --color-primary: #0f4c81;
+  --color-primary-soft: #e3f2ff;
+  --color-text-main: #111111;
+  --color-text-muted: #444444;
+  --color-border: #dddddd;
+
+  --radius-lg: 0.75rem;
+  --radius-md: 0.5rem;
+  --radius-pill: 999px;
+
+  --shadow-soft: 0 6px 18px rgba(0, 0, 0, 0.06);
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+body.page {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+  color: var(--color-text-main);
+  background-color: var(--color-bg);
+  line-height: 1.5;
+}
+
+/******* Layout Shell ***************/
+.page-header,
+.page-main,
+.page-footer {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 1rem 1.25rem;
+}
+
+/******* Header & Branding ***************/
+.site-header {
+  padding-bottom: 0.75rem;
+}
+
+.site-logo {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.site-tagline {
+  margin: 0.25rem 0 0;
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+}
+
+/******* Navigation ***************/
+.site-nav {
+  margin-top: 0.75rem;
+}
+
+.nav-list {
+  list-style: none;
+  display: flex;
+  gap: 0.5rem;
+  padding: 0;
+  margin: 0;
+  overflow-x: auto;
+}
+
+.nav-list li {
+  white-space: nowrap;
+}
+
+.nav-list a {
+  display: inline-block;
+  padding: 0.4rem 0.9rem;
+  border-radius: var(--radius-pill);
+  text-decoration: none;
+  font-size: 0.85rem;
+  color: var(--color-text-main);
+  background-color: var(--color-surface);
+  border: 1px solid transparent;
+}
+
+.nav-list a:hover,
+.nav-list a:focus {
+  border-color: var(--color-border);
+}
+
+/******* Hero Section ***************/
+.hero {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  background-color: var(--color-surface);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+  box-shadow: var(--shadow-soft);
+}
+
+.hero-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.hero-title {
+  margin: 0;
+  font-size: 1.4rem;
+}
+
+.hero-subtitle {
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--color-text-muted);
+}
+
+.hero-vehicle {
+  margin-top: 0.75rem;
+  padding: 0.75rem;
+  background-color: var(--color-primary-soft);
+  border-radius: var(--radius-md);
+}
+
+.vehicle-title {
+  margin: 0 0 0.35rem;
+  font-size: 1.1rem;
+}
+
+.vehicle-description {
+  margin: 0 0 0.5rem;
+  font-size: 0.9rem;
+}
+
+.vehicle-features {
+  margin: 0 0 0.75rem;
+  padding-left: 1.25rem;
+  font-size: 0.9rem;
+}
+
+/******* Buttons ***************/
+.btn-primary {
+  display: inline-block;
+  padding: 0.55rem 1.3rem;
+  border-radius: var(--radius-pill);
+  border: none;
+  background-color: var(--color-primary);
+  color: #ffffff;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+  filter: brightness(1.05);
+}
+
+/******* Hero Images ***************/
+.hero-image-wrapper {
+  position: relative;
+  margin-top: 0.5rem;
+}
+
+.hero-image {
+  width: 100%;
+  border-radius: var(--radius-md);
+  display: block;
+}
+
+.hero-badge {
+  position: absolute;
+  bottom: 0.75rem;
+  right: 0.75rem;
+  width: 32%;
+  max-width: 120px;
+}
+
+/******* Reviews Section ***************/
+.reviews {
+  margin-top: 1.5rem;
+  padding: 1.2rem 1.25rem;
+  background-color: var(--color-surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+}
+
+.section-title {
+  margin: 0 0 0.7rem;
+  font-size: 1.1rem;
+}
+
+.reviews-list {
+  margin: 0;
+  padding-left: 1.25rem;
+  font-size: 0.9rem;
+}
+
+/******* Upgrades Section ***************/
+.upgrades {
+  margin-top: 1.5rem;
+  padding: 1.2rem 1.25rem 1.4rem;
+  background-color: var(--color-surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+}
+
+.upgrade-grid {
+  margin-top: 0.9rem;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+.upgrade-card {
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  overflow: hidden;
+  background-color: #ffffff;
+}
+
+.upgrade-image {
+  width: 100%;
+  display: block;
+}
+
+.upgrade-title {
+  margin: 0.5rem 0 0;
+  padding: 0 0.75rem;
+  font-size: 0.95rem;
+}
+
+.upgrade-link {
+  text-decoration: none;
+  color: var(--color-primary);
+}
+
+.upgrade-link:hover,
+.upgrade-link:focus {
+  text-decoration: underline;
+}
+
+.upgrade-text {
+  margin: 0.25rem 0 0.75rem;
+  padding: 0 0.75rem 0.7rem;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+/******* Footer ***************/
+.page-footer {
+  margin-top: 1.5rem;
+  padding-top: 0;
+  padding-bottom: 1.5rem;
+}
+
+.footer-text {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+/******* Images Global ***************/
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/******* Responsive Layout – Larger Screens ***************/
+
+/* Small tablets and up: give upgrades a 2-column grid */
+@media (min-width: 640px) {
+  .upgrade-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .page-header,
+  .page-main,
+  .page-footer {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+/* Tablets and small desktops: hero side-by-side */
+@media (min-width: 768px) {
+  .hero {
+    flex-direction: row;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  .hero-content,
+  .hero-image-wrapper {
+    flex: 1;
+  }
+
+  .hero-image-wrapper {
+    margin-top: 0;
+  }
+
+  .hero-title {
+    font-size: 1.7rem;
+  }
+
+  .site-logo {
+    font-size: 1.7rem;
+  }
+}
+
+/* Larger desktops: wider layout, 4-column upgrades grid */
+@media (min-width: 1024px) {
+  .page-header,
+  .page-main,
+  .page-footer {
+    max-width: 1200px;
+  }
+
+  .upgrade-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .reviews,
+  .upgrades {
+    margin-top: 2rem;
+  }
+}
