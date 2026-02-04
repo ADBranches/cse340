@@ -1,29 +1,25 @@
-// server.js (ESM, no CommonJS)
+// server.js - esm mdules
 
 import express from "express";
 import dotenv from "dotenv";
 import path from "path";
 import { fileURLToPath } from "url";
-import expressLayouts from "express-ejs-layouts";  // ⬅ ADD THIS
+import expressLayouts from "express-ejs-layouts";
 import indexRouter from "./routes/index.js";
 
 dotenv.config();
 
 const app = express();
 
-// Resolve __dirname in ESM
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// View engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
-// ⬇ enable layouts
 app.use(expressLayouts);
 app.set("layout", "layout"); // uses views/layout.ejs
 
-// Static files
 app.use(express.static(path.join(__dirname, "public")));
 
 // Routes
