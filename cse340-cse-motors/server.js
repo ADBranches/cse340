@@ -4,6 +4,7 @@ import express from "express";
 import dotenv from "dotenv";
 import path from "path";
 import { fileURLToPath } from "url";
+import expressLayouts from "express-ejs-layouts";  // ⬅ ADD THIS
 import indexRouter from "./routes/index.js";
 
 dotenv.config();
@@ -18,6 +19,10 @@ const __dirname = path.dirname(__filename);
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
+// ⬇ enable layouts
+app.use(expressLayouts);
+app.set("layout", "layout"); // uses views/layout.ejs
+
 // Static files
 app.use(express.static(path.join(__dirname, "public")));
 
@@ -28,8 +33,6 @@ app.use("/", indexRouter);
 const port = process.env.PORT || 5500;
 const host = process.env.HOST || "localhost";
 
-// Log statement to confirm server operation
 app.listen(port, () => {
   console.log(`app listening on ${host}:${port}`);
 });
-
