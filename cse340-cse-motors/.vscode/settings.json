@@ -1,0 +1,21 @@
+{
+    "sqltools.connections": [
+        {
+            "pgOptions": {
+                "ssl": {
+                    "rejectUnauthorized": true
+                }
+            },
+            "ssh": "Disabled",
+            "previewLimit": 50,
+            "server": "dpg-d61mb3vfte5s738r3bm0-a.oregon-postgres.render.com",
+            "port": 5432,
+            "driver": "PostgreSQL",
+            "name": "render-cse340",
+            "group": "Render Servers",
+            "database": "cse_motors_db_r062",
+            "username": "cse_motors_db_r062_user",
+            "password": "zg57VDZ7lwdDDE3XhcKMFLvJsqXJDNzI"
+        }
+    ]
+}
