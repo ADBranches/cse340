@@ -16,7 +16,7 @@ import { buildVehicleDetailGrid } from "../utilities/index.js";
  */
 export async function buildVehicleDetail(req, res, next) {
   try {
-    // 1️⃣ Validate and normalize the id from route params
+    // Validate and normalize the id from route params
     const invId = Number.parseInt(req.params.invId, 10);
 
     if (Number.isNaN(invId)) {
@@ -25,7 +25,7 @@ export async function buildVehicleDetail(req, res, next) {
       return next(err);
     }
 
-    // 2️⃣ Ask the model for this vehicle
+    // Ask the model for this vehicle
     const vehicle = await getInventoryById(invId);
 
     if (!vehicle) {
@@ -34,7 +34,7 @@ export async function buildVehicleDetail(req, res, next) {
       return next(err);
     }
 
-    // 3️⃣ Prepare data for the view
+    // Prepare data for the view
     const title = `${vehicle.inv_make} ${vehicle.inv_model}`;
     const grid = buildVehicleDetailGrid(vehicle);
 
