@@ -1,4 +1,3 @@
-// models/inventory-model.js
 import pool from "../database/index.js";
 
 /**
