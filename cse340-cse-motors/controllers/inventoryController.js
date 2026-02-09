@@ -10,10 +10,21 @@ import { buildVehicleDetailGrid } from "../utilities/index.js";
  * - On success, renders the inventory detail view with all data.
  *
  /**
- * NOTE:
+ * NB...
  * This controller uses buildVehicleDetailGrid (in utilities/index.js)
  * to generate the HTML grid for the detail view.
  */
+
+ export async function buildManagementView(req, res, next) {
+  try {
+    return res.render("inventory/management", {
+      title: "Vehicle Management",
+    });
+  } catch (error) {
+    return next(error);
+  }
+}
+
 export async function buildVehicleDetail(req, res, next) {
   try {
     // Validate and normalize the id from route params
