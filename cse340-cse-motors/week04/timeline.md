@@ -1,5 +1,3 @@
-Nice, your structure is already in great shape for W03 🙌
-Here’s a **W04 dev timeline** targeted at getting **100/100** on the rubric, with concrete files + dirs.
 
 ---
 
@@ -262,8 +260,4 @@ Use the W04 rubric as a checklist.
      * ZIP of project folder (excluding `node_modules` unless teacher says otherwise). 
 
 ---
-
-If you want, next we can:
-
-* Draft `utilities/inventory-validation.js` and one of the new views (`add-classification.ejs`) exactly, ready to paste.
 
