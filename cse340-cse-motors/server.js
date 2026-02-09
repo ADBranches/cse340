@@ -1,4 +1,4 @@
-// server.js - esm mdules
+// server.js - esm modules
 import express from "express";
 import dotenv from "dotenv";
 import path from "path";
@@ -7,7 +7,8 @@ import expressLayouts from "express-ejs-layouts";
 import indexRouter from "./routes/index.js";
 import inventoryRouter from "./routes/inventoryRoute.js";
 import errorRouter from "./routes/errorRoute.js";
-
+import session from "express-session";
+import flash from "connect-flash";
 
 dotenv.config();
 
@@ -20,7 +21,32 @@ app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
 app.use(expressLayouts);
-app.set("layout", "layout"); 
+app.set("layout", "layout");
+
+// Body parsers for form + JSON
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
+
+// Session middleware (required for flash)
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET || "cse340-super-secret",
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false }, // set true only if using HTTPS
+  })
+);
+
+// Flash middleware
+app.use(flash());
+
+// Make flash messages available in all views as `notice`
+app.use((req, res, next) => {
+  res.locals.notice = req.flash("notice");
+  next();
+});
+
+// Static files
 app.use(express.static(path.join(__dirname, "public")));
 
 // Routes
@@ -59,7 +85,6 @@ app.use((err, req, res, next) => {
   });
 });
 
-
 // Local Server Information (with safe fallbacks)
 const port = process.env.PORT || 5500;
 const host = process.env.HOST || "localhost";
@@ -67,4 +92,3 @@ const host = process.env.HOST || "localhost";
 app.listen(port, () => {
   console.log(`app listening on ${host}:${port}`);
 });
-

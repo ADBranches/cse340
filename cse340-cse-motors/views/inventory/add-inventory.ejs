@@ -1,0 +1,133 @@
+<!-- views/inventory/add-inventory.ejs -->
+
+<h1>Add New Vehicle</h1>
+
+<% if (typeof notice !== "undefined" && notice) { %>
+  <p class="notice"><%= notice %></p>
+<% } %>
+
+<% if (typeof errors !== "undefined" && errors.length) { %>
+  <div class="errors">
+    <ul>
+      <% errors.forEach(err => { %>
+        <li><%= err.msg %></li>
+      <% }) %>
+    </ul>
+  </div>
+<% } %>
+
+<form action="/inv/add-inventory" method="post" class="inv-form">
+  <!-- Classification dropdown -->
+  <label for="classification_id">Classification</label>
+  <p class="hint">Choose the type this vehicle belongs to.</p>
+  <%- classificationList %>
+
+  <!-- Make -->
+  <label for="inv_make">Make</label>
+  <input
+    type="text"
+    id="inv_make"
+    name="inv_make"
+    required
+    minlength="3"
+    placeholder="Min 3 characters e.g Toyota"
+    value="<%= typeof inv_make !== 'undefined' ? inv_make : '' %>"
+  />
+
+  <!-- Model -->
+  <label for="inv_model">Model</label>
+  <input
+    type="text"
+    id="inv_model"
+    name="inv_model"
+    required
+    minlength="3"
+    placeholder="Min 3 characters e.g Corolla"
+    value="<%= typeof inv_model !== 'undefined' ? inv_model : '' %>"
+   />
+
+
+  <!-- Description -->
+  <label for="inv_description">Description</label>
+  <textarea
+    id="inv_description"
+    name="inv_description"
+    required
+    placeholder="Brief description of the vehicle..."
+    ><%= typeof inv_description !== 'undefined' ? inv_description : '' %>
+   </textarea>
+
+  <!-- Image path -->
+  <label for="inv_image">Image Path</label>
+  <input
+    type="text"
+    id="inv_image"
+    name="inv_image"
+    required
+    placeholder="/images/vehicles/no-image.png"
+    value="<%= typeof inv_image !== 'undefined' ? inv_image : '/images/vehicles/no-image.png' %>"
+  />
+
+  <!-- Thumbnail path -->
+  <label for="inv_thumbnail">Thumbnail Path</label>
+  <input
+    type="text"
+    id="inv_thumbnail"
+    name="inv_thumbnail"
+    required
+    placeholder="/images/vehicles/no-image-tn.png"
+    value="<%= typeof inv_thumbnail !== 'undefined' ? inv_thumbnail : '/images/vehicles/no-image-tn.png' %>"
+  />
+
+  <!-- Price -->
+  <label for="inv_price">Price</label>
+  <input
+    type="number"
+    id="inv_price"
+    name="inv_price"
+    required
+    min="0"
+    step="0.01"
+    placeholder="Decimal or integer e.g 25478"
+    value="<%= typeof inv_price !== 'undefined' ? inv_price : '' %>"
+  />
+
+  <!-- Year -->
+  <label for="inv_year">Year</label>
+  <input
+    type="number"
+    id="inv_year"
+    name="inv_year"
+    required
+    min="1900"
+    max="2100"
+    placeholder="4-digit year e.g 2017"
+    value="<%= typeof inv_year !== 'undefined' ? inv_year : '' %>"
+  />
+
+  <!-- Miles -->
+  <label for="inv_miles">Miles</label>
+  <input
+    type="number"
+    id="inv_miles"
+    name="inv_miles"
+    required
+    min="0"
+    step="1"
+    placeholder="Digits only e.g 39500"
+    value="<%= typeof inv_miles !== 'undefined' ? inv_miles : '' %>"
+  />
+
+  <!-- Color -->
+  <label for="inv_color">Color</label>
+  <input
+    type="text"
+    id="inv_color"
+    name="inv_color"
+    required
+    placeholder="e.g. Silver"
+    value="<%= typeof inv_color !== 'undefined' ? inv_color : '' %>"
+  />
+
+  <button type="submit">Add Vehicle</button>
+</form>

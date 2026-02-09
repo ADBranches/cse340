@@ -1,0 +1,35 @@
+<!-- views/inventory/add-classification.ejs -->
+
+<h1>Add New Classification</h1>
+
+<% if (typeof notice !== "undefined" && notice) { %>
+  <p class="notice"><%= notice %></p>
+<% } %>
+
+<% if (typeof errors !== "undefined" && errors.length) { %>
+  <div class="errors">
+    <ul>
+      <% errors.forEach(err => { %>
+        <li><%= err.msg %></li>
+      <% }) %>
+    </ul>
+  </div>
+<% } %>
+
+<form action="/inv/add-classification" method="post" class="inv-form">
+    <label for="classification_name">Classification Name</label>
+    <span class="hint">
+        No spaces or special characters (example: NewCar).
+    </span>
+    <input
+        type="text"
+        id="classification_name"
+        name="classification_name"
+        required
+        pattern="^[A-Za-z0-9]+$"
+        placeholder="NewCar"
+        value="<%= typeof classification_name !== 'undefined' ? classification_name : '' %>"
+    />
+    
+  <button type="submit">Add Classification</button>
+</form>

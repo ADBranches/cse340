@@ -1,20 +1,31 @@
 // utilities/index.js
+import inventoryModel from "../models/inventory-model.js";
+/**
+ * Wrap async controllers so errors go to next()
+ * instead of crashing the app.
+ */
+function handleErrors(controller) {
+  return async function (req, res, next) {
+    try {
+      await controller(req, res, next);
+    } catch (err) {
+      next(err);
+    }
+  };
+}
 
 /**
- * Build the HTML for a single vehicle detail view.
+ * Building the HTML for a single vehicle detail view.
  * - Uses formatted price in USD
  * - Uses formatted mileage with commas
- * - Includes year, make, model, description, image, and basic meta fields
- *
- * This is the "new custom function" required in utilities > index.js
- * for the Vehicle Detail assignment.
+ * - Normalizes image path to /images/vehicles/*.webp
  */
-export function buildVehicleDetailGrid(vehicle) {
+function buildVehicleDetailGrid(vehicle) {
   if (!vehicle) {
     return '<p class="notice">Vehicle details are not available.</p>';
   }
 
-  // 1️⃣ Format price as USD: $25,000.00
+  // Format price as USD: $25,000.00
   const priceFormatter = new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "USD",
@@ -27,7 +38,7 @@ export function buildVehicleDetailGrid(vehicle) {
     Number(vehicle.inv_miles || 0)
   );
 
-  // Normalize image path to match /images/vehicles/*.webp
+  // Normalize image path to /images/vehicles/*.webp
   const rawImagePath = vehicle.inv_image || "";
 
   // Ensure path is under /images/vehicles/
@@ -78,3 +89,29 @@ export function buildVehicleDetailGrid(vehicle) {
     </section>
   `;
 }
+
+async function buildClassificationList(selectedId = null) {
+  const classifications = await inventoryModel.getClassifications();
+
+  let options = '<option value="">Choose a Classification</option>';
+
+  classifications.forEach((row) => {
+    const selected =
+      Number(selectedId) === Number(row.classification_id) ? " selected" : "";
+    options += `<option value="${row.classification_id}"${selected}>${row.classification_name}</option>`;
+  });
+
+  return `
+    <select id="classification_id" name="classification_id" required>
+      ${options}
+    </select>
+  `;
+}
+
+const utilities = {
+  handleErrors,
+  buildVehicleDetailGrid,
+  buildClassificationList,
+};
+
+export default utilities;
