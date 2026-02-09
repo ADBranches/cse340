@@ -1,0 +1,60 @@
+<section
+  class="page-section inventory-list-page"
+  aria-labelledby="classification-heading"
+>
+  <header class="inventory-list-page__header">
+    <h1 id="classification-heading" class="inventory-list-page__title">
+      <%= title %>
+    </h1>
+    <p class="inventory-list-page__subtitle">
+      Select a vehicle below to view full details.
+    </p>
+  </header>
+
+  <% if (vehicles && vehicles.length) { %>
+    <ul class="inventory-list" aria-label="Available vehicles">
+      <% vehicles.forEach(function (vehicle) { %>
+        <li class="inventory-card">
+          <a
+            href="/inv/detail/<%= vehicle.inv_id %>"
+            class="inventory-card__link"
+          >
+            <% if (vehicle.inv_image) {
+                const rawImagePath = vehicle.inv_image || "";
+
+                // 1) Ensuring we are in /images/vehicles/
+                let imagePath = rawImagePath.includes("/vehicles/")
+                ? rawImagePath
+                : rawImagePath.replace("/images/", "/images/vehicles/");
+
+                // 2) Ensuring we use .webp extension to match our files
+                if (!imagePath.toLowerCase().endsWith(".webp")) {
+                imagePath = imagePath.replace(/\.(jpg|jpeg|png)$/i, ".webp");
+                }
+            %>
+            <img
+                src="<%= imagePath %>"
+                alt="Image of <%= vehicle.inv_year %> <%= vehicle.inv_make %> <%= vehicle.inv_model %>"
+                class="inventory-card__image"
+            />
+            <% } %>
+
+            <h2 class="inventory-card__title">
+              <%= vehicle.inv_year %> <%= vehicle.inv_make %> <%= vehicle.inv_model %>
+            </h2>
+
+            <p class="inventory-card__price">
+              $<%= Number(vehicle.inv_price).toLocaleString() %>
+            </p>
+
+            <p class="inventory-card__miles">
+              <%= Number(vehicle.inv_miles).toLocaleString() %> miles
+            </p>
+          </a>
+        </li>
+      <% }); %>
+    </ul>
+  <% } else { %>
+    <p class="notice">No vehicles found in this classification.</p>
+  <% } %>
+</section>

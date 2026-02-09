@@ -1,11 +1,15 @@
-// routes/inventoryRoute.js
 import { Router } from "express";
-import { buildVehicleDetail } from "../controllers/inventoryController.js";
+import {
+  buildVehicleDetail,
+  buildClassificationView,
+} from "../controllers/inventoryController.js";
 
 const router = Router();
 
-// /inv/detail/1, /inv/detail/2
+// /inv/type/1, /inv/type/3, etc.  (classification by ID)
+router.get("/type/:classificationId", buildClassificationView);
+
+// /inv/detail/1, /inv/detail/2  (single vehicle detail)
 router.get("/detail/:invId", buildVehicleDetail);
 
 export default router;
-

@@ -1,7 +1,7 @@
 // utilities/index.js
 
 /**
- * Building the HTML for a single vehicle detail view.
+ * Build the HTML for a single vehicle detail view.
  * - Uses formatted price in USD
  * - Uses formatted mileage with commas
  * - Includes year, make, model, description, image, and basic meta fields
@@ -14,7 +14,7 @@ export function buildVehicleDetailGrid(vehicle) {
     return '<p class="notice">Vehicle details are not available.</p>';
   }
 
-  // Formatting price as USD: $25,000.00
+  // 1️⃣ Format price as USD: $25,000.00
   const priceFormatter = new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "USD",
@@ -22,17 +22,28 @@ export function buildVehicleDetailGrid(vehicle) {
   });
   const price = priceFormatter.format(Number(vehicle.inv_price || 0));
 
-  // Formatting mileage with commas: 101,222
+  // Format mileage with commas: 101,222
   const miles = new Intl.NumberFormat("en-US").format(
     Number(vehicle.inv_miles || 0)
   );
 
+  // Normalize image path to match /images/vehicles/*.webp
   const rawImagePath = vehicle.inv_image || "";
-  const imagePath = rawImagePath
-    ? rawImagePath.includes("/vehicles/")
-      ? rawImagePath
-      : rawImagePath.replace("/images/", "/images/vehicles/")
-    : "/images/vehicles/no-image.png";
+
+  // Ensure path is under /images/vehicles/
+  let imagePath = rawImagePath.includes("/vehicles/")
+    ? rawImagePath
+    : rawImagePath.replace("/images/", "/images/vehicles/");
+
+  // If DB still has .jpg/.jpeg/.png, silently switch to .webp
+  if (!imagePath.toLowerCase().endsWith(".webp")) {
+    imagePath = imagePath.replace(/\.(jpg|jpeg|png)$/i, ".webp");
+  }
+
+  // Fallback if somehow still empty
+  if (!imagePath) {
+    imagePath = "/images/vehicles/v1/no-image.png";
+  }
 
   // Build HTML string
   return `
