@@ -337,3 +337,143 @@ img {
     margin-top: 2rem;
   }
 }
+
+/* Vehicle detail page layout */
+
+.vehicle-detail-page {
+  margin: 2rem 0 3rem;
+}
+
+.vehicle-detail-page__header {
+  margin-bottom: 1.5rem;
+}
+
+.vehicle-detail-page__title {
+  font-size: 2rem;
+  line-height: 1.2;
+  margin-bottom: 0.25rem;
+}
+
+.vehicle-detail-page__subtitle {
+  color: #4b5563;
+  margin: 0;
+}
+
+/* Grid for the detail view */
+
+.vehicle-detail {
+  margin-top: 1rem;
+}
+
+.vehicle-detail__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 2rem;
+  align-items: flex-start;
+}
+
+/* Text column */
+
+.vehicle-detail__info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.vehicle-detail__price {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+.vehicle-detail__miles {
+  color: #4b5563;
+  margin-bottom: 0.5rem;
+}
+
+.vehicle-detail__description {
+  line-height: 1.6;
+}
+
+.vehicle-detail__meta {
+  list-style: none;
+  padding: 0;
+  margin: 0.75rem 0 0;
+}
+
+.vehicle-detail__meta li + li {
+  margin-top: 0.25rem;
+}
+
+/* Image column */
+
+.vehicle-detail__image-wrapper {
+  text-align: center;
+}
+
+.vehicle-detail__image {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 0.5rem;
+}
+
+/* Back link button */
+
+.vehicle-detail-page__back {
+  margin-top: 2rem;
+}
+
+.btn-secondary {
+  display: inline-block;
+  padding: 0.5rem 1.1rem;
+  border-radius: 9999px;
+  border: 1px solid #d1d5db;
+  background-color: #ffffff;
+  color: #111827;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.btn-secondary:hover,
+.btn-secondary:focus {
+  background-color: #f3f4f6;
+}
+  
+/* Responsive: two columns on larger screens */
+
+@media (min-width: 768px) {
+  .vehicle-detail__grid {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  }
+}
+
+/* Error page styles */
+
+.error-page {
+  margin: 2rem 0 3rem;
+  text-align: center;
+}
+
+.error-page__title {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.error-page__status {
+  color: #4b5563;
+  margin-bottom: 1.25rem;
+}
+
+.error-page__message {
+  margin-bottom: 0.75rem;
+}
+
+.error-page__hint {
+  color: #6b7280;
+  margin-bottom: 1.5rem;
+}
+
+.error-page__actions {
+  margin-top: 0.5rem;
+}

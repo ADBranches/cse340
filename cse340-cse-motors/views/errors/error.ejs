@@ -1,0 +1,27 @@
+<% /* views/errors/error.ejs */ %>
+
+<section
+  class="page-section error-page"
+  aria-labelledby="error-heading"
+>
+  <header class="error-page__header">
+    <h1 id="error-heading" class="error-page__title">
+      <%= title %>
+    </h1>
+    <p class="error-page__status">
+      Status code: <strong><%= status %></strong>
+    </p>
+  </header>
+
+  <p class="error-page__message">
+    <%= message %>
+  </p>
+
+  <p class="error-page__hint">
+    You can go back to the home page and try again.
+  </p>
+
+  <p class="error-page__actions">
+    <a href="/" class="btn-secondary">← Back to Home</a>
+  </p>
+</section>

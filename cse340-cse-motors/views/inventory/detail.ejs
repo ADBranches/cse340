@@ -1,0 +1,20 @@
+<section
+  class="page-section vehicle-detail-page"
+  aria-labelledby="vehicle-detail-heading"
+>
+  <header class="vehicle-detail-page__header">
+    <h1 id="vehicle-detail-heading" class="vehicle-detail-page__title">
+      <%= title %>
+    </h1>
+    <p class="vehicle-detail-page__subtitle">
+      Detailed specifications and photos for this vehicle.
+    </p>
+  </header>
+
+  <!-- HTML string built in utilities.buildVehicleDetailGrid(vehicle) -->
+  <%- grid %>
+
+  <p class="vehicle-detail-page__back">
+    <a href="/" class="btn-secondary">← Back to Home</a>
+  </p>
+</section>
