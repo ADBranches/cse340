@@ -73,10 +73,10 @@ INNER JOIN public.classification AS c
   ON i.classification_id = c.classification_id
 WHERE c.classification_name = 'Sport';
 
--- 6. Update all image paths to insert "/vehicles"
+-- 6. Updating all image paths to insert "/vehicles"
 --    into the inv_image and inv_thumbnail fields.
---    Example result: /images/vehicles/a-car-name.jpg
---    Use a single UPDATE with REPLACE.
+--    Example result: /images/vehicles/a-car-name.webp
+--    Using a single UPDATE with REPLACE.
 UPDATE public.inventory
 SET inv_image = REPLACE(inv_image, '/images/', '/images/vehicles/'),
     inv_thumbnail = REPLACE(inv_thumbnail, '/images/', '/images/vehicles/');
