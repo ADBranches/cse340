@@ -9,6 +9,6 @@
 export function triggerTestError(req, res, next) {
   const err = new Error("Intentional test error from footer link.");
   err.status = 500;
-  // Pass the error into the global error-handling middleware
+  // Passing the error into the global error-handling middleware
   next(err);
 }

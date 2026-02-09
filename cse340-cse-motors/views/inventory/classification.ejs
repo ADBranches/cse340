@@ -22,12 +22,10 @@
             <% if (vehicle.inv_image) {
                 const rawImagePath = vehicle.inv_image || "";
 
-                // 1) Ensuring we are in /images/vehicles/
                 let imagePath = rawImagePath.includes("/vehicles/")
                 ? rawImagePath
                 : rawImagePath.replace("/images/", "/images/vehicles/");
 
-                // 2) Ensuring we use .webp extension to match our files
                 if (!imagePath.toLowerCase().endsWith(".webp")) {
                 imagePath = imagePath.replace(/\.(jpg|jpeg|png)$/i, ".webp");
                 }

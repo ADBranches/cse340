@@ -40,7 +40,7 @@ app.use(
 // Flash middleware
 app.use(flash());
 
-// Make flash messages available in all views as `notice`
+// Making flash messages available in all views as `notice`
 app.use((req, res, next) => {
   res.locals.notice = req.flash("notice");
   next();

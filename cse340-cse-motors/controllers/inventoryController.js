@@ -146,8 +146,6 @@ export async function buildVehicleDetail(req, res, next) {
     const title = `${vehicle.inv_make} ${vehicle.inv_model}`;
     const grid = utilities.buildVehicleDetailGrid(vehicle);
 
-    // For now we pass the raw vehicle object.
-    // In Phase 4 we'll also pass a `grid` from utilities.buildVehicleDetailGrid(vehicle).
     return res.render("inventory/detail", {
       title,
       vehicle,
