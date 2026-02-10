@@ -1,5 +1,11 @@
 -- database/db-account-seed.sql
 
+-- Seed account passwords (plaintext used to generate bcrypt hashes) from scripts/password_hashes.mjs:
+-- client@example.com   : Cse340@Client!
+-- employee@example.com : Cse340@Employee!
+-- admin@example.com    : Cse340@Admin!
+
+
 INSERT INTO public.account (
   account_firstname,
   account_lastname,

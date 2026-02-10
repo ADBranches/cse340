@@ -12,7 +12,6 @@ import utilities from "../utilities/index.js";
 import invValidate from "../utilities/inventory-validation.js";
 import authMiddleware from "../utilities/auth-middleware.js";
 
-
 const router = Router();
 
 // Add classification form

@@ -707,3 +707,176 @@ body {
   background-color: #f0f0f0;
   color: #222;
 }
+
+/* ============================
+   Account & Auth Pages
+   ============================ */
+
+.account-login,
+.account-update,
+.account-management,
+.inventory-management {
+  max-width: 720px;
+  margin: 2rem auto 3rem;
+}
+
+/* Page headers */
+.account-login__header,
+.account-update__header,
+.account-management__header {
+  margin-bottom: 1.5rem;
+}
+
+.account-login__header h1,
+.account-update__header h1,
+.account-management__header h1 {
+  margin: 0 0 0.5rem;
+  font-size: 1.6rem;
+}
+
+.account-management__status,
+.account-login__header p {
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--color-text-muted);
+}
+
+/* Card-style sections */
+.account-login,
+.account-update__section,
+.account-management__section,
+.inventory-management {
+  background-color: var(--color-surface);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem 1.75rem 2rem;
+  box-shadow: var(--shadow-soft);
+}
+
+.account-management__section + .account-management__section,
+.account-update__section + .account-update__section {
+  margin-top: 1.5rem;
+}
+
+/* Section headings */
+.account-management__section h3,
+.account-update__section h2,
+.inventory-management h1 {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+}
+
+.account-management__section p,
+.account-update__section p,
+.inventory-management__intro {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  color: var(--color-text-muted);
+}
+
+
+/* Forms inside account pages */
+
+.form--account-login,
+.form--account-update,
+.form--password-update {
+  max-width: 480px;
+  margin-top: 1rem;
+}
+
+.form--password-update {
+  margin-top: 1.25rem;
+}
+
+/* Make account buttons consistent with main button styles */
+
+.form--account-login .button--primary,
+.form--account-update .button--primary,
+.form--password-update .button--secondary {
+  border-radius: var(--radius-pill);
+  padding-inline: 1.5rem;
+}
+
+.account-update__hint {
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  margin-bottom: 0.75rem;
+}
+
+
+/* Inventory Management page */
+
+.inventory-management {
+  background-color: var(--color-surface);
+}
+
+.inventory-management h1 {
+  font-size: 1.6rem;
+  margin-bottom: 0.5rem;
+}
+
+.inventory-management__intro {
+  margin-top: 0;
+  margin-bottom: 1.25rem;
+  color: var(--color-text-muted);
+}
+
+/* Links list */
+
+.inv-management-links {
+  list-style: none;
+  padding: 0;
+  margin: 0.5rem 0 0;
+}
+
+.inv-management-links li + li {
+  margin-top: 0.5rem;
+}
+
+.inv-management-links a {
+  text-decoration: none;
+  color: var(--color-primary);
+  font-weight: 600;
+  position: relative;
+}
+
+.inv-management-links a::after {
+  content: " →";
+  font-size: 0.9em;
+}
+
+.inv-management-links a:hover,
+.inv-management-links a:focus {
+  text-decoration: underline;
+}
+
+.account-management__welcome {
+  margin: 1rem 0 0.75rem;
+  font-size: 1.3rem;
+}
+
+.site-header__account {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.account-welcome {
+  color: var(--color-text-muted);
+}
+
+.account-link {
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+.account-link:hover,
+.account-link:focus {
+  text-decoration: underline;
+}
+
+.account-link--logout {
+  font-weight: 600;
+}

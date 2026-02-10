@@ -8,19 +8,22 @@ import accountModel from "../models/account-model.js";
 function updateAccountRules() {
   return [
     body("account_firstname")
-    .trim()
-    .notEmpty().withMessage("First name is required.")
-    .isLength({ min: 2 }).withMessage("First name must be at least 2 characters.")
-    .isAlpha("en-US", { ignore: " -'" })
-    .withMessage("First name must contain only letters.");
+      .trim()
+      .notEmpty()
+      .withMessage("First name is required.")
+      .isLength({ min: 2 })
+      .withMessage("First name must be at least 2 characters.")
+      .isAlpha("en-US", { ignore: " -'" })
+      .withMessage("First name must contain only letters."),
 
-  body("account_lastname")
-    .trim()
-    .notEmpty().withMessage("Last name is required.")
-    .isLength({ min: 2 }).withMessage("Last name must be at least 2 characters.")
-    .isAlpha("en-US", { ignore: " -'" })
-    .withMessage("Last name must contain only letters."),
-
+    body("account_lastname")
+      .trim()
+      .notEmpty()
+      .withMessage("Last name is required.")
+      .isLength({ min: 2 })
+      .withMessage("Last name must be at least 2 characters.")
+      .isAlpha("en-US", { ignore: " -'" })
+      .withMessage("Last name must contain only letters."),
 
     body("account_email")
       .trim()
@@ -60,7 +63,7 @@ function updatePasswordRules() {
       .withMessage("Password must contain at least one lowercase letter.")
       .matches(/\d/)
       .withMessage("Password must contain at least one number.")
-      .matches(/[!@#$%^&*(),.?\":{}|<>]/)
+      .matches(/[!@#$%^&*(),.?":{}|<>]/)
       .withMessage("Password must contain at least one special character."),
   ];
 }
