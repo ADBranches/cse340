@@ -49,13 +49,14 @@
 
   <!-- Description -->
   <label for="inv_description">Description</label>
+  <p class="hint">Give shoppers a short but clear description of this vehicle.</p>
   <textarea
     id="inv_description"
     name="inv_description"
     required
     placeholder="Brief description of the vehicle..."
-    ><%= typeof inv_description !== 'undefined' ? inv_description : '' %>
-   </textarea>
+  ><%= typeof inv_description !== 'undefined' ? inv_description : '' %></textarea>
+
 
   <!-- Image path -->
   <label for="inv_image">Image Path</label>
@@ -81,6 +82,7 @@
 
   <!-- Price -->
   <label for="inv_price">Price</label>
+  <p class="hint">Use digits only; decimals allowed.</p>
   <input
     type="number"
     id="inv_price"
@@ -91,6 +93,7 @@
     placeholder="Decimal or integer e.g 25478"
     value="<%= typeof inv_price !== 'undefined' ? inv_price : '' %>"
   />
+
 
   <!-- Year -->
   <label for="inv_year">Year</label>

@@ -1,0 +1,41 @@
+<section class="account-management">
+    <header class="account-management__header">
+        <h1>Account Management</h1>
+        <p class="account-management__status">
+        You're logged in. Use this page to manage your details and access tools.
+        </p>
+    </header>
+
+  <% if (typeof notice !== "undefined" && notice) { %>
+    <p class="notice"><%= notice %></p>
+  <% } %>
+
+  <% if (account && account.account_firstname) { %>
+    <h2 class="account-management__welcome">
+      Welcome <%= account.account_firstname %>
+    </h2>
+  <% } %>
+
+  <section class="account-management__section">
+    <h3>Edit Your Information</h3>
+    <p>Keep your contact details up to date.</p>
+    <a
+      href="/account/edit/<%= account.account_id %>"
+      class="button button--primary"
+    >
+      Edit Account Information
+    </a>
+  </section>
+
+  <% if (account && (account.account_type === "Employee" || account.account_type === "Admin")) { %>
+    <section class="account-management__section">
+      <h3>Inventory Management</h3>
+      <p>
+        As <%= account.account_type %>, you can manage the CSE Motors inventory.
+      </p>
+      <a href="/inv/" class="button button--secondary">
+        Manage Inventory
+      </a>
+    </section>
+  <% } %>
+</section>

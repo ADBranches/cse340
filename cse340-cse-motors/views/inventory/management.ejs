@@ -1,12 +1,17 @@
 <!-- views/inventory/management.ejs -->
 
-<h1>Vehicle Management</h1>
+<section class="inventory-management">
+  <h1>Vehicle Management</h1>
+  <p class="inventory-management__intro">
+    Use these tools to add classifications and vehicles to the CSE Motors inventory.
+  </p>
 
-<% if (typeof notice !== "undefined" && notice) { %>
-  <p class="notice"><%= notice %></p>
-<% } %>
+  <% if (typeof notice !== "undefined" && notice) { %>
+    <p class="notice"><%= notice %></p>
+  <% } %>
 
-<ul class="inv-management-links">
-  <li><a href="/inv/add-classification">Add New Classification</a></li>
-  <li><a href="/inv/add-inventory">Add New Vehicle</a></li>
-</ul>
+  <ul class="inv-management-links">
+    <li><a href="/inv/add-classification">Add New Classification</a></li>
+    <li><a href="/inv/add-inventory">Add New Vehicle</a></li>
+  </ul>
+</section>

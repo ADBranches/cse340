@@ -10,6 +10,7 @@ import {
 } from "../controllers/inventoryController.js";
 import utilities from "../utilities/index.js";
 import invValidate from "../utilities/inventory-validation.js";
+import authMiddleware from "../utilities/auth-middleware.js";
 
 
 const router = Router();
@@ -17,18 +18,22 @@ const router = Router();
 // Add classification form
 router.get(
   "/add-classification",
+  authMiddleware.checkEmployeeOrAdmin,
   utilities.handleErrors(buildAddClassification)
 );
+
 
 // Adding inventory form
 router.get(
   "/add-inventory",
+  authMiddleware.checkEmployeeOrAdmin,
   utilities.handleErrors(buildAddInventory)
 );
 
 // Handling inventory submit
 router.post(
   "/add-inventory",
+  authMiddleware.checkEmployeeOrAdmin,
   invValidate.inventoryRules(),
   invValidate.checkInventoryData,
   utilities.handleErrors(registerInventory)
@@ -37,18 +42,29 @@ router.post(
 // Handle classification submit
 router.post(
   "/add-classification",
+  authMiddleware.checkEmployeeOrAdmin,
   invValidate.classRules(),
   invValidate.checkClassData,
   utilities.handleErrors(registerClassification)
 );
 
+
 // Inventory management home: /inv
-router.get("/", buildManagementView);
+router.get(
+  "/",
+  authMiddleware.checkEmployeeOrAdmin,
+  utilities.handleErrors(buildManagementView)
+);
 
-// /inv/type/1, /inv/type/3  (classification by ID)
-router.get("/type/:classificationId", buildClassificationView);
+router.get(
+  "/type/:classificationId",
+  utilities.handleErrors(buildClassificationView)
+);
 
-// /inv/detail/1, /inv/detail/2  (single vehicle detail)
-router.get("/detail/:invId", buildVehicleDetail);
+router.get(
+  "/detail/:invId",
+  utilities.handleErrors(buildVehicleDetail)
+);
+
 
 export default router;

@@ -9,6 +9,9 @@ import inventoryRouter from "./routes/inventoryRoute.js";
 import errorRouter from "./routes/errorRoute.js";
 import session from "express-session";
 import flash from "connect-flash";
+import cookieParser from "cookie-parser";
+import authMiddleware from "./utilities/auth-middleware.js";
+import accountRouter from "./routes/accountRoute.js";
 
 dotenv.config();
 
@@ -46,13 +49,21 @@ app.use((req, res, next) => {
   next();
 });
 
+// Parsing cookies so we can read JWT
+app.use(cookieParser());
+
+// Attaching account data (from JWT) to res.locals
+app.use(authMiddleware.attachAccountData);
+
 // Static files
 app.use(express.static(path.join(__dirname, "public")));
 
 // Routes
 app.use("/", indexRouter);
+app.use("/account", accountRouter);
 app.use("/inv", inventoryRouter);
 app.use("/", errorRouter);
+
 
 // Ignore Chrome DevTools /.well-known requests so they don't spam the logs
 app.get("/.well-known/appspecific/com.chrome.devtools.json", (req, res) => {

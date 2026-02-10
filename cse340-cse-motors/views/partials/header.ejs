@@ -1,5 +1,26 @@
 <div class="site-header">
-  <h1 class="site-logo">CSE Motors</h1>
-  <p class="site-tagline">Quality vehicles, custom upgrades, and service you can trust.</p>
-</div>
+  <div class="site-header__branding">
+    <h1 class="site-logo">CSE Motors</h1>
+    <p class="site-tagline">
+      Quality vehicles, custom upgrades, and service you can trust.
+    </p>
+  </div>
 
+  <div class="site-header__account" aria-label="Account links">
+    <% if (accountData && accountData.account_firstname) { %>
+      <span class="account-welcome">
+        Welcome
+        <a href="/account" class="account-link">
+          <%= accountData.account_firstname %>
+        </a>
+      </span>
+      <a href="/account/logout" class="account-link account-link--logout">
+        Logout
+      </a>
+    <% } else { %>
+      <a href="/account/login" class="account-link account-link--primary">
+        My Account
+      </a>
+    <% } %>
+  </div>
+</div>

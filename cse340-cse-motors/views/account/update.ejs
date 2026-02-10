@@ -1,0 +1,120 @@
+<section class="account-update">
+  <header class="account-update__header">
+    <h1>Edit Account</h1>
+  </header>
+
+  <% if (typeof notice !== "undefined" && notice) { %>
+    <p class="notice"><%= notice %></p>
+  <% } %>
+
+  <% if (typeof errors !== "undefined" && errors.length) { %>
+    <div class="errors">
+      <ul>
+        <% errors.forEach(function (err) { %>
+          <li><%= err.msg %></li>
+        <% }); %>
+      </ul>
+    </div>
+  <% } %>
+
+  <!-- Account Info Update -->
+  <section class="account-update__section">
+    <h2>Update Account Information</h2>
+    <p>Update your name and email address.</p>
+
+    <form action="/account/update" method="post" class="form form--account-update">
+      <input
+        type="hidden"
+        name="account_id"
+        value="<%= account_id %>"
+      />
+
+      <div class="form__field">
+        <label for="account_firstname">First Name</label>
+        <span class="hint">Letters only, at least 2 characters.</span>
+        <input
+          type="text"
+          id="account_firstname"
+          name="account_firstname"
+          required
+          minlength="2"
+          autocomplete="given-name"
+          placeholder="e.g. John"
+          value="<%= account_firstname || '' %>"
+        />
+      </div>
+
+      <div class="form__field">
+        <label for="account_lastname">Last Name</label>
+        <span class="hint">Letters only, at least 2 characters.</span>
+        <input
+          type="text"
+          id="account_lastname"
+          name="account_lastname"
+          required
+          minlength="2"
+          autocomplete="family-name"
+          placeholder="e.g. Doe"
+          value="<%= account_lastname || '' %>"
+        />
+      </div>
+
+      <div class="form__field">
+        <label for="account_email">Email</label>
+        <span class="hint">Use a valid email address you check often.</span>
+        <input
+          type="email"
+          id="account_email"
+          name="account_email"
+          required
+          autocomplete="email"
+          placeholder="you@example.com"
+          value="<%= account_email || '' %>"
+        />
+      </div>
+
+      <button type="submit" class="button button--primary">
+        Save Changes
+      </button>
+    </form>
+  </section>
+
+  <!-- Password Change -->
+  <section class="account-update__section">
+    <h2>Change Password</h2>
+    <p id="password-rules" class="account-update__hint">
+        Password must be at least 12 characters and include uppercase, lowercase,
+        a number, and a special character.
+    </p>
+
+    <form
+      action="/account/update-password"
+      method="post"
+      class="form form--password-update"
+    >
+      <input
+        type="hidden"
+        name="account_id"
+        value="<%= account_id %>"
+      />
+
+      <div class="form__field">
+        <label for="account_password">New Password</label>
+        <input
+          type="password"
+          id="account_password"
+          name="account_password"
+          required
+          minlength="12"
+          autocomplete="new-password"
+          aria-describedby="password-rules"
+          placeholder="Choose a strong new password"
+        />
+      </div>
+
+      <button type="submit" class="button button--secondary">
+        Update Password
+      </button>
+    </form>
+  </section>
+</section>
