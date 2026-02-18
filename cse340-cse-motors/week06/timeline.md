@@ -1,167 +1,526 @@
 
+---
 
-2. **Small improvements I’d add (per rubric row).**
+## Phase 0 – Decide enhancement & branch (10–15 min)
+
+**Goal:** Freeze the plan and isolate work.
+
+**What to do**
+
+* Create a new git branch, e.g. `w06-test-drive-enhancement`.
+* Confirm enhancement scope:
+
+  * Only **logged-in** users can submit a **test drive request** for a vehicle.
+  * Each request ties to:
+    `inv_id`, `account_id`, `preferred_date`, `preferred_time`, `contact_phone`, `message`, `status` (default `"Pending"`), `created_at`.
+  * There will be:
+
+    * A **request form** from the vehicle detail page.
+    * A **management view** listing requests (with vehicle info).
+
+*No file changes yet.*
 
 ---
 
-## 1️⃣ Structure vs W06 requirements
+## Phase 1 – Database design & sync (MOST IMPORTANT) (45–60 min)
 
-W06 + project page say your enhancement must: use the DB, add model, controller, view, and follow best practices (prepared statements, validation, error handling).
+**Goal:** Create the new table and keep **local + Render** in sync.
 
-Your phases map almost perfectly:
+### 1.1. Design the table
 
-* **Phase 0 – Branch & scope** → good project hygiene (not graded directly, but smart).
-* **Phase 1 – DB design & sync** → covers “Database interaction” & future-proofing both local + Render.
-* **Phase 2 – Model** → clean separation; matches “new model / behaviors” requirement.
-* **Phase 3 – Validation utilities** → directly targets the “Data Validation” row.
-* **Phase 4 – Controller + routes** → clearly satisfies “Controller” row + error handling hooks.
-* **Phase 5 – Views + CSS** → “View” row + UI polish.
-* **Phase 6 – Testing** → proves everything works; lets you fix gaps *before* submitting.
-* **Phase 7 – Canvas submission checklist** → covers the “describe your enhancement & how to use it” warning that can give you 0 if missing.
+Table: `public.testdrive_request` (or similar, just be consistent).
 
-So structurally: ✅ yes – this is a rubric-aligned timeline.
+Columns:
 
-Now let’s “sharpen” it so every row is clearly **Complete** and not “Developing”.
+* `testdrive_id` SERIAL PRIMARY KEY
+* `inv_id` INT NOT NULL REFERENCES inventory(inv_id)
+* `account_id` INT NOT NULL REFERENCES account(account_id)
+* `preferred_date` DATE NOT NULL
+* `preferred_time` VARCHAR(10) NOT NULL
+* `contact_phone` VARCHAR(20) NOT NULL
+* `message` TEXT
+* `status` VARCHAR(20) DEFAULT 'Pending'
+* `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 
----
+### 1.2. Files to update for schema
 
-## 2️⃣ Small upgrades I’d add (for guaranteed 100/100)
+1. **Main schema file**
+   (e.g. `database/assignment2.sql` / `database/init.sql` / `database/cse-motors.sql`)
 
-### A. Database – make it obviously “effective”
+   * Append a full:
 
-You already:
+     ```sql
+     CREATE TABLE IF NOT EXISTS testdrive_request (...);
+     ```
 
-* Add a **new table** `testdrive_request`.
-* Insert into it.
-* Read from it (management view).
+2. **`render-cse340.session.sql`**
 
-**Upgrade it slightly:**
+   * Append the **same** `CREATE TABLE testdrive_request` block.
 
-* In `getAllRequests()` (model) and `/test-drive/manage` (controller), **JOIN with `inventory`** so the table shows car name, maybe price, not just `inv_id`. That makes the DB usage look more “real” and “effective”, not just a standalone table.
+> **DB sync rule:** Any time you add/change tables → update local schema file(s) **and** `render-cse340.session.sql` together.
 
-> E.g. `SELECT t.*, i.inv_make, i.inv_model FROM testdrive_request t JOIN inventory i ON t.inv_id = i.inv_id ORDER BY t.created_at DESC;`
+### 1.3. Apply DB changes
 
-That helps lock in the **“uses the database effectively and accurately”** wording. 
+* **Local DB**
 
----
+  * Run the `CREATE TABLE` block (or re-run schema file with `\i`).
 
-### B. Model – best practices
+* **Render DB**
 
-Your Phase 2 already says:
+  * Run the same `CREATE TABLE` block via `psql` or Render console.
 
-* Separate file `models/testdrive-model.js`.
-* Prepared statements.
-* Reusable functions.
+* **Quick sanity check**
 
-**Two micro-improvements:**
+  ```sql
+  SELECT * FROM testdrive_request LIMIT 1;
+  ```
 
-1. Make all model functions **async** and return consistent shapes (`rows` or `rowCount > 0`).
-2. Include *at least one non-trivial method*, e.g.:
-
-   * `updateTestdriveStatus(testdrive_id, newStatus)` – even if you only call it once (admin changing Pending → Confirmed).
-
-That shows **“additional behaviors”** beyond a single insert. 
+Should return 0 rows, no errors.
 
 ---
 
-### C. Controller – error handling & auth
+## Phase 2 – Model layer (test drive model) (30–45 min)
 
-Your Phase 4 is strong already (build form, process, management view).
+**Goal:** Encapsulate DB access using best practices (prepared statements, async, joins).
 
-**Make sure of:**
+### Files to create / modify
 
-* Every controller method is `async` and wrapped in `try { ... } catch (error) { next(error); }`.
+1. **`models/testdrive-model.js`** (NEW)
 
-* If `inventory-model` returns no vehicle for the `inv_id`, you:
+Follow your existing `inventory-model.js` style:
+
+* Import DB pool/connection.
+
+* Export async functions:
 
   ```js
-  if (!vehicle) {
-    req.flash("notice", "Vehicle not found.");
-    return res.redirect("/inv");
-  }
+  async function createTestdriveRequest({ inv_id, account_id, preferred_date, preferred_time, contact_phone, message }) { ... }
+
+  async function getRequestsByAccountId(account_id) { ... }     // optional but nice
+
+  async function getAllRequests() { ... }                       // for management view
+
+  async function updateTestdriveStatus(testdrive_id, newStatus) { ... } // simple admin action
   ```
 
-* `processTestdriveRequest`:
+* Use **prepared statements** with placeholders (`$1`, `$2`, …).
 
-  * Uses `res.locals.accountData.account_id` (or your project’s pattern).
-  * If DB insert returns failure, flash “Something went wrong. Please try again.” and re-render form with the original values.
+* In `getAllRequests()`, use a **JOIN** so the management view shows real info:
 
-That nails the **Controller** + **Error Handling** rows (both want “works correctly and follows best practices” / “error handling done properly”). 
+  * Join `testdrive_request` with `inventory` (e.g. `inv_make`, `inv_model`, maybe `inv_year`).
 
----
+2. **`models/index.js`** (if you have one)
 
-### D. View – make the enhancement easy to find
+* Re-export the test drive model:
 
-Your plan for `request.ejs` and `management.ejs` is great.
+  * e.g. `export * as testdriveModel from "./testdrive-model.js";`
 
-**Two tweaks:**
-
-1. On `inventory/detail.ejs`, make the **“Request Test Drive”** button clearly visible, in the same style as your main call-to-action buttons.
-2. In your Canvas submission comment, tell the grader *exactly*:
-
-   > “To see my enhancement, go to any vehicle detail page (`/inv/detail/:inv_id`) and click ‘Request Test Drive’. Logged-in users can submit the form; managers can view requests at `/test-drive/manage`.”
-
-This aligns perfectly with the project warning that if you don’t describe how to use it, they may give 0 and send it back.
+**No DB schema change here, just queries.**
 
 ---
 
-### E. Data Validation – ensure **client + server** (this is the big one)
+## Phase 3 – Validation utilities (20–30 min)
 
-The rubric wants **both client-side and server-side** validation *in the enhancement*, with errors returned to the view. 
+**Goal:** Full marks for **client + server validation**.
 
-You already planned:
+### Files to create / modify
 
-* Server-side: `testdriveRules` + `checkTestdriveData` using `express-validator`.
+1. **`utilities/testdrive-validation.js`** (NEW)
 
-**Add this explicitly to your timeline:**
+Pattern it after your existing validation utilities (e.g. `account-validation.js`):
 
-* In `views/testdrive/request.ejs`:
+* Import from `express-validator`:
 
-  * Use HTML5 attributes:
-
-    * `required` on `preferred_date`, `preferred_time`, `contact_phone`.
-    * `type="date"` and `type="time"` and `type="tel"`.
-
-  * If your project already has a general client-side validation JS file, **reuse** it on this form (even a simple “prevent submit if required fields are empty” script is enough).
-
-* Make sure the view shows validation errors like your other forms:
-
-  ```ejs
-  <% if (errors && errors.length) { %>
-    <div class="errors">
-      <ul>
-        <% errors.forEach(error => { %>
-          <li><%= error.msg %></li>
-        <% }) %>
-      </ul>
-    </div>
-  <% } %>
+  ```js
+  import { body } from "express-validator";
   ```
 
-That directly satisfies the “client-side AND server-side validation” full-credit description. 
+* Export:
+
+  ```js
+  const testdriveRules = () => [
+    body("preferred_date")
+      .trim()
+      .notEmpty().withMessage("Preferred date is required.")
+      .isISO8601().withMessage("Preferred date must be a valid date."),
+    body("preferred_time")
+      .trim()
+      .notEmpty().withMessage("Preferred time is required."),
+    body("contact_phone")
+      .trim()
+      .notEmpty().withMessage("Contact phone is required.")
+      .isLength({ min: 7 }).withMessage("Contact phone seems too short."),
+    body("message")
+      .optional()
+      .isLength({ max: 500 }).withMessage("Message must be 500 characters or less."),
+  ];
+
+  const checkTestdriveData = (req, res, next) => {
+    // mirror your existing pattern: collect errors, if any re-render the form
+  };
+  ```
+
+* Ensure `checkTestdriveData`:
+
+  * Grabs validation errors with `validationResult(req)`.
+  * If errors → re-render `testdrive/request` with:
+
+    * `errors`
+    * `testdriveData` (so form stays filled)
+    * `vehicle` (so page still shows car info)
+
+2. **`utilities/index.js`** (if you centralize exports)
+
+* Export `testdriveRules` and `checkTestdriveData`.
+
+**Server-side validation is now covered. Client-side comes in Phase 5.**
 
 ---
 
-### F. Error Handling – prove it in Phase 6
+## Phase 4 – Controller + routes wiring (45–60 min)
 
-Your testing phase is already strong; just sharpen it slightly:
+**Goal:** New controller logic that uses the model, validation, and error handling.
 
-* Add to Phase 6:
+### 4.1. New controller
 
-  * “Confirm that any unexpected errors in testdrive controllers go to the global error handler (hit `/test-drive/manage` after temporarily breaking a query, see formatted error page, then fix it).”
-  * “Confirm that normal user mistakes (invalid date, blank phone) show **friendly validation messages** on the same form – not a raw error.”
+Create: **`controllers/testdriveController.js`**
 
-That clearly meets **“Error handling is done properly throughout the enhancement.”** 
+Add async handlers, all with `try { … } catch (error) { next(error); }`:
+
+1. `buildTestdriveForm` (GET `/test-drive/request/:inv_id`)
+
+   * Use `inventory-model` to get vehicle:
+
+     ```js
+     const vehicle = await inventoryModel.getVehicleById(inv_id);
+     if (!vehicle) {
+       req.flash("notice", "Vehicle not found.");
+       return res.redirect("/inv");
+     }
+     ```
+
+   * Render `testdrive/request` with:
+
+     * `vehicle`
+     * `errors` (empty or from validation)
+     * `testdriveData` (for repopulating form)
+     * `notice` (flash notice if any)
+
+2. `processTestdriveRequest` (POST `/test-drive/request/:inv_id`)
+
+   * After `testdriveRules()` + `checkTestdriveData` middlware runs, assume data is valid.
+   * Pull `account_id` from `res.locals.accountData.account_id` (or your project’s pattern).
+   * Call `testdriveModel.createTestdriveRequest(...)` inside `try/catch`.
+   * On success:
+
+     * `req.flash("notice", "Your test drive request has been submitted.");`
+     * `res.redirect("/inv/detail/" + inv_id);`
+   * If insert fails (rowCount 0 or error):
+
+     * Flash a generic error and re-render form with previous inputs.
+
+3. `buildTestdriveManagement` (GET `/test-drive/manage`)
+
+   * Optionally restrict to managers or just logged-in users (per your project rules).
+   * Use `getAllRequests()`:
+
+     * This should return joined data (request + vehicle info).
+   * Render `testdrive/management` with the list.
+
+4. (Optional) `updateTestdriveStatus` (POST or POST/PUT route)
+
+   * Use `updateTestdriveStatus(testdrive_id, newStatus)`.
+   * Redirect back to `/test-drive/manage` with a flash notice.
+
+### 4.2. New route file
+
+Create: **`routes/testdriveRoute.js`**
+
+* Import:
+
+  * `express`
+  * `testdriveController`
+  * Auth middleware (e.g. `utilities/account-validation.js` or `accountRoute`’s middleware)
+  * `testdriveRules`, `checkTestdriveData`
+
+* Define routes:
+
+  ```js
+  router.get(
+    "/request/:inv_id",
+    accountController.checkLogin,       // or your project’s auth middleware
+    testdriveController.buildTestdriveForm
+  );
+
+  router.post(
+    "/request/:inv_id",
+    accountController.checkLogin,
+    testdriveRules(),
+    checkTestdriveData,
+    testdriveController.processTestdriveRequest
+  );
+
+  router.get(
+    "/manage",
+    accountController.checkLogin,       // maybe extra manager check
+    testdriveController.buildTestdriveManagement
+  );
+  ```
+
+### 4.3. Wire into `server.js`
+
+* At top:
+
+  ```js
+  import testdriveRouter from "./routes/testdriveRoute.js";
+  ```
+
+* In routing section:
+
+  ```js
+  app.use("/test-drive", testdriveRouter);
+  ```
 
 ---
 
-## Final verdict
+## Phase 5 – Views + CSS + client-side validation (45–60 min)
 
-* **Structure:** Solid. The phase order (DB → model → validation → controller → view → test → submit) is exactly what you want.
-* **To guarantee 100/100:**
+**Goal:** New views that look consistent, show errors, and include client-side checks.
 
-  1. Add **JOINs** and maybe a simple **status update** in the model.
-  2. Make sure controllers all use `try/catch + next(error)` and handle “vehicle not found”.
-  3. Explicitly include **client-side validation** (HTML5 + optional small JS).
-  4. In Canvas comment, *very clearly* describe how to reach the feature and what it does.
+### 5.1. EJS views
 
+1. **`views/testdrive/request.ejs`** (NEW)
+
+   * Use your main `layout.ejs`.
+
+   * Show:
+
+     * Vehicle info (make, model, year).
+     * Flash notice.
+     * Validation errors block.
+
+   * Test drive form:
+
+     ```html
+     <form action="/test-drive/request/<%= vehicle.inv_id %>" method="post" class="inv-form" id="testdriveForm">
+       <!-- Errors -->
+       <% if (errors && errors.length) { %>
+         <div class="errors">
+           <ul>
+             <% errors.forEach(error => { %>
+               <li><%= error.msg %></li>
+             <% }) %>
+           </ul>
+         </div>
+       <% } %>
+
+       <!-- Preferred Date -->
+       <div class="form__field">
+         <label for="preferred_date">Preferred Date</label>
+         <input
+           type="date"
+           id="preferred_date"
+           name="preferred_date"
+           required
+           value="<%= testdriveData?.preferred_date || '' %>"
+         />
+       </div>
+
+       <!-- Preferred Time -->
+       <div class="form__field">
+         <label for="preferred_time">Preferred Time</label>
+         <input
+           type="time"
+           id="preferred_time"
+           name="preferred_time"
+           required
+           value="<%= testdriveData?.preferred_time || '' %>"
+         />
+       </div>
+
+       <!-- Contact Phone -->
+       <div class="form__field">
+         <label for="contact_phone">Contact Phone</label>
+         <input
+           type="tel"
+           id="contact_phone"
+           name="contact_phone"
+           required
+           value="<%= testdriveData?.contact_phone || '' %>"
+         />
+       </div>
+
+       <!-- Message -->
+       <div class="form__field">
+         <label for="message">Message (optional)</label>
+         <textarea
+           id="message"
+           name="message"
+           maxlength="500"
+         ><%= testdriveData?.message || '' %></textarea>
+       </div>
+
+       <button type="submit" class="button--primary">
+         Submit Test Drive Request
+       </button>
+     </form>
+     ```
+
+   * **Client-side validation** (simple, optional but nice):
+
+     ```html
+     <script>
+       const form = document.getElementById("testdriveForm");
+       form.addEventListener("submit", (event) => {
+         const date = form.preferred_date.value.trim();
+         const time = form.preferred_time.value.trim();
+         const phone = form.contact_phone.value.trim();
+
+         if (!date || !time || !phone) {
+           // simple guard; server does deeper checks
+           alert("Preferred date, time, and phone are required.");
+           event.preventDefault();
+         }
+       });
+     </script>
+     ```
+
+   This + HTML5 `required` gives you **client-side validation**.
+
+2. **`views/testdrive/management.ejs`** (NEW, recommended)
+
+   * Display a table of requests using the joined data from `getAllRequests()`:
+
+     * Columns: Vehicle (make+model), preferred date, time, phone, status, created_at, maybe actions (update status).
+
+3. **Modify existing views to link to the feature**
+
+   * **`views/inventory/detail.ejs`**:
+
+     * Add a clear button:
+
+       ```html
+       <a href="/test-drive/request/<%= inv_id %>" class="button--primary">
+         Request Test Drive
+       </a>
+       ```
+
+     * Place it near your main “call to action” area.
+
+   * **Account / management page** (e.g. `views/account/management.ejs` or `views/inventory/management.ejs`):
+
+     ```html
+     <a href="/test-drive/manage" class="button--secondary">
+       View Test Drive Requests
+     </a>
+     ```
+
+### 5.2. CSS updates
+
+* **`public/css/styles.css`**
+
+  * Reuse existing class names: `.inv-form`, `.form__field`, `.button--primary`, `.errors`, `.notice`.
+  * If needed, define something like `.testdrive-list` or `.testdrive-table` for the management page, but keep it minimal.
+
+---
+
+## Phase 6 – Validation, error-handling & testing pass (45–60 min)
+
+**Goal:** Prove every rubric line is satisfied **before** you deploy.
+
+### 6.1. Local manual tests
+
+1. **Auth flow**
+
+   * As **not logged in**:
+
+     * Go to `/inv/detail/:inv_id`, click “Request Test Drive”.
+     * Should be redirected to login (auth middleware).
+   * After login:
+
+     * Return and confirm the form loads with vehicle info.
+
+2. **Validation**
+
+   * Submit empty form → should stay on same page with error messages.
+   * Invalid data (e.g. short phone) → get proper error messages from server-side validation.
+   * Valid data → success flash, redirect to `/inv/detail/:inv_id`.
+
+3. **DB check**
+
+   * In psql:
+
+     ```sql
+     SELECT * FROM testdrive_request ORDER BY testdrive_id DESC LIMIT 3;
+     ```
+
+   * Confirm values match the form inputs.
+
+4. **Management view**
+
+   * Visit `/test-drive/manage` while logged in as the right role.
+   * Confirm the list shows:
+
+     * Request + vehicle data (from JOIN).
+     * Status field.
+
+5. **Error handling**
+
+   * Temporarily break a query in `testdrive-model.js` (e.g. wrong column name).
+   * Hit `/test-drive/manage`:
+
+     * Confirm it goes through `next(error)` into your global error handler page (no raw stack dump).
+   * Fix it back.
+
+### 6.2. Deploy to Render & sync DB
+
+1. **Push to GitHub**
+
+   * Ensure all new/updated files are committed:
+
+     * `models/testdrive-model.js`
+     * `controllers/testdriveController.js`
+     * `routes/testdriveRoute.js`
+     * `utilities/testdrive-validation.js`
+     * SQL schema files
+     * New views and CSS tweaks
+
+2. **Render DB**
+
+   * If not already done: run the same `CREATE TABLE testdrive_request` on Render DB.
+
+3. **Redeploy app**
+
+   * Trigger redeploy and test on **live URL**:
+
+     * `/inv/detail/:inv_id` → Request Test Drive → form + submission.
+     * `/test-drive/manage` → list of requests.
+
+---
+
+## Phase 7 – Canvas submission checklist (10–15 min)
+
+**Goal:** Present the enhancement clearly so graders give full credit.
+
+1. **Check against the 6 rubric pieces**
+
+   * **Database:** New `testdrive_request` table, used by model & controller, JOIN with `inventory`.
+   * **Model:** `testdrive-model.js` with async functions, prepared statements, and at least one extra behavior (`updateTestdriveStatus`).
+   * **Controller:** `testdriveController.js` with `try/catch`, `next(error)`, friendly flashes, “vehicle not found” handling.
+   * **View:** `testdrive/request.ejs` + `testdrive/management.ejs` + updated `inventory/detail.ejs` link.
+   * **Validation:** Client-side (HTML5 + JS) + server-side (`testdriveRules` + `checkTestdriveData`) with errors shown in the view.
+   * **Error handling:** All DB calls wrapped; global error handler catches unexpected errors.
+
+2. **Submission package**
+
+   * GitHub repo link (branch merged into main).
+   * Render live URL.
+   * Any zipped source (if teacher wants it, minus `node_modules`).
+
+3. **Canvas comment (very important)**
+
+   In our submission comment, we'll write something like:
+
+   > “For my Week 06 enhancement, I added a **Test Drive Request** feature. Logged-in users can visit any vehicle detail page (`/inv/detail/:inv_id`) and click **‘Request Test Drive’** to submit a form with preferred date, time, phone, and an optional message. Requests are saved in a new `testdrive_request` database table and can be viewed on `/test-drive/manage` in a management view that joins test drive requests with the vehicle data. The feature includes client-side and server-side validation, and all DB interactions use prepared statements with proper error handling.”
+
+---
