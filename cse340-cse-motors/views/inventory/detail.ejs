@@ -2,6 +2,10 @@
   class="page-section vehicle-detail-page"
   aria-labelledby="vehicle-detail-heading"
 >
+  <% if (typeof notice !== "undefined" && notice) { %>
+    <p class="notice"><%= notice %></p>
+  <% } %>
+
   <header class="vehicle-detail-page__header">
     <h1 id="vehicle-detail-heading" class="vehicle-detail-page__title">
       <%= title %>

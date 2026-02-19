@@ -952,3 +952,13 @@ body {
   clip: rect(0, 0, 0, 0);
   border: 0;
 }
+
+/* Smooth hide for flash notices */
+.notice {
+  transition: opacity 0.3s ease;
+}
+
+.notice--hide {
+  opacity: 0;
+  visibility: hidden;
+}

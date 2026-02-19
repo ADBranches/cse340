@@ -16,5 +16,16 @@
     <footer class="page-footer">
       <%- include('partials/footer') %>
     </footer>
+
+    <script>
+      (function () {
+        var notice = document.querySelector(".notice");
+        if (!notice) return;
+
+        setTimeout(function () {
+          notice.classList.add("notice--hide");
+        }, 3000); // 3 seconds
+      })();
+    </script>
   </body>
 </html>
