@@ -12,6 +12,7 @@ import flash from "connect-flash";
 import cookieParser from "cookie-parser";
 import authMiddleware from "./utilities/auth-middleware.js";
 import accountRouter from "./routes/accountRoute.js";
+import testdriveRouter from "./routes/testdriveRoute.js";
 
 dotenv.config();
 
@@ -63,6 +64,7 @@ app.use("/", indexRouter);
 app.use("/account", accountRouter);
 app.use("/inv", inventoryRouter);
 app.use("/", errorRouter);
+app.use("/test-drive", testdriveRouter); 
 
 
 // Ignore Chrome DevTools /.well-known requests so they don't spam the logs

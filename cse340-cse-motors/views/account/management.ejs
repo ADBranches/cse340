@@ -29,12 +29,16 @@
 
   <% if (account && (account.account_type === "Employee" || account.account_type === "Admin")) { %>
     <section class="account-management__section">
-      <h3>Inventory Management</h3>
+      <h3>Inventory & Test Drives</h3>
       <p>
-        As <%= account.account_type %>, you can manage the CSE Motors inventory.
+        As <%= account.account_type %>, you can manage the CSE Motors inventory
+        and view customer test drive requests.
       </p>
       <a href="/inv/" class="button button--secondary">
         Manage Inventory
+      </a>
+      <a href="/test-drive/manage" class="button button--secondary">
+        View Test Drive Requests
       </a>
     </section>
   <% } %>

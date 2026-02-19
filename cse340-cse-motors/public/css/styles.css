@@ -880,3 +880,75 @@ body {
 .account-link--logout {
   font-weight: 600;
 }
+
+
+/* Test drive request form */
+.testdrive-request {
+  max-width: 48rem;
+  margin: 0 auto;
+}
+
+.testdrive-request__header {
+  margin-bottom: 1.5rem;
+}
+
+.testdrive-summary {
+  margin-bottom: 1.5rem;
+  padding: 1rem 1.25rem;
+  background-color: #f7f7f7;
+  border-radius: 4px;
+}
+
+.testdrive-summary__title {
+  margin: 0 0 0.5rem;
+}
+
+.testdrive-request__back {
+  margin-top: 1.5rem;
+}
+
+/* Test drive management table */
+.testdrive-table-wrapper {
+  overflow-x: auto;
+}
+
+.testdrive-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+.testdrive-table th,
+.testdrive-table td {
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+  vertical-align: top;
+}
+
+.testdrive-table th {
+  font-weight: 600;
+}
+
+.testdrive-table__status-form {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.button--small {
+  padding: 0.25rem 0.75rem;
+  font-size: 0.875rem;
+}
+
+/* Optional helper for screen readers */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}

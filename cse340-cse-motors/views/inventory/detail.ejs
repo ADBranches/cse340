@@ -13,7 +13,17 @@
 
   <%- grid %>
 
-  <p class="vehicle-detail-page__back">
-    <a href="/" class="btn-secondary">← Back to Home</a>
-  </p>
+    <div class="vehicle-detail-page__actions">
+      <a
+        href="/test-drive/request/<%= vehicle.inv_id %>"
+        class="button button--primary"
+      >
+        Request Test Drive
+      </a>
+    </div>
+
+    <p class="vehicle-detail-page__back">
+      <a href="/" class="btn-secondary">← Back to Home</a>
+    </p>
+  </section>
 </section>

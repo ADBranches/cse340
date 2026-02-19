@@ -1,0 +1,77 @@
+<section class="page-section testdrive-management">
+  <header class="testdrive-management__header">
+    <h1>Test Drive Requests</h1>
+    <p>
+      View and manage test drive requests submitted by customers.
+    </p>
+  </header>
+
+  <% if (typeof notice !== "undefined" && notice) { %>
+    <p class="notice"><%= notice %></p>
+  <% } %>
+
+  <% if (!requests || !requests.length) { %>
+    <p>No test drive requests have been submitted yet.</p>
+  <% } else { %>
+    <div class="testdrive-table-wrapper">
+      <table class="testdrive-table">
+        <thead>
+          <tr>
+            <th>Vehicle</th>
+            <th>Customer</th>
+            <th>Preferred Date</th>
+            <th>Preferred Time</th>
+            <th>Phone</th>
+            <th>Status</th>
+            <th>Requested</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% requests.forEach(function (r) { %>
+            <tr>
+              <td>
+                <a href="/inv/detail/<%= r.inv_id %>">
+                  <%= r.inv_year %> <%= r.inv_make %> <%= r.inv_model %>
+                </a>
+              </td>
+              <td>
+                <%= r.account_firstname %> <%= r.account_lastname %><br />
+                <small><%= r.account_email %></small>
+              </td>
+              <td><%= r.preferred_date ? r.preferred_date.toISOString().slice(0, 10) : "" %></td>
+              <td><%= r.preferred_time %></td>
+              <td><%= r.contact_phone %></td>
+              <td><%= r.status %></td>
+              <td><%= r.created_at ? r.created_at.toISOString().slice(0, 16).replace("T", " ") : "" %></td>
+              <td>
+                <form
+                  action="/test-drive/update-status"
+                  method="post"
+                  class="testdrive-table__status-form"
+                >
+                  <input type="hidden" name="testdrive_id" value="<%= r.testdrive_id %>" />
+                  <label class="visually-hidden" for="status-<%= r.testdrive_id %>">
+                    Update status
+                  </label>
+                  <select
+                    id="status-<%= r.testdrive_id %>"
+                    name="status"
+                  >
+                    <option value="Pending"   <%= r.status === "Pending"   ? "selected" : "" %>>Pending</option>
+                    <option value="Confirmed" <%= r.status === "Confirmed" ? "selected" : "" %>>Confirmed</option>
+                    <option value="Completed" <%= r.status === "Completed" ? "selected" : "" %>>Completed</option>
+                    <option value="Cancelled" <%= r.status === "Cancelled" ? "selected" : "" %>>Cancelled</option>
+                  </select>
+                  <button type="submit" class="button button--secondary button--small">
+                    Update
+                  </button>
+                </form>
+              </td>
+            </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </div>
+  <% } %>
+</section>

@@ -1,0 +1,125 @@
+<section
+  class="page-section testdrive-request"
+  aria-labelledby="testdrive-heading"
+>
+  <header class="testdrive-request__header">
+    <h1 id="testdrive-heading"><%= title || "Request Test Drive" %></h1>
+    <p>
+      Choose a convenient date and time to test drive this vehicle.
+    </p>
+  </header>
+
+  <% if (typeof notice !== "undefined" && notice) { %>
+    <p class="notice"><%= notice %></p>
+  <% } %>
+
+  <section class="testdrive-summary" aria-label="Vehicle summary">
+    <% if (vehicle) { %>
+      <h2 class="testdrive-summary__title">
+        <%= vehicle.inv_year %> <%= vehicle.inv_make %> <%= vehicle.inv_model %>
+      </h2>
+      <p class="testdrive-summary__text">
+        You are requesting a test drive for this vehicle. We’ll contact you to
+        confirm the exact time.
+      </p>
+    <% } else { %>
+      <p class="testdrive-summary__text">
+        Vehicle details are not available.
+      </p>
+    <% } %>
+  </section>
+
+  <form
+    action="/test-drive/request/<%= vehicle ? vehicle.inv_id : '' %>"
+    method="post"
+    class="form inv-form"
+    id="testdriveForm"
+  >
+    <% if (errors && errors.length) { %>
+      <div class="errors">
+        <ul>
+          <% errors.forEach(function (err) { %>
+            <li><%= err.msg %></li>
+          <% }); %>
+        </ul>
+      </div>
+    <% } %>
+
+    <!-- Preferred Date -->
+    <div class="form__field">
+      <label for="preferred_date">Preferred Date</label>
+      <span class="hint">Pick the day you’d like to visit.</span>
+      <input
+        type="date"
+        id="preferred_date"
+        name="preferred_date"
+        required
+        value="<%= (testdriveData && testdriveData.preferred_date) || '' %>"
+      />
+    </div>
+
+    <!-- Preferred Time -->
+    <div class="form__field">
+      <label for="preferred_time">Preferred Time</label>
+      <span class="hint">Example: morning, afternoon, or a specific time.</span>
+      <input
+        type="time"
+        id="preferred_time"
+        name="preferred_time"
+        required
+        value="<%= (testdriveData && testdriveData.preferred_time) || '' %>"
+      />
+    </div>
+
+    <!-- Contact Phone -->
+    <div class="form__field">
+      <label for="contact_phone">Contact Phone</label>
+      <span class="hint">We’ll use this number to confirm your appointment.</span>
+      <input
+        type="tel"
+        id="contact_phone"
+        name="contact_phone"
+        required
+        value="<%= (testdriveData && testdriveData.contact_phone) || '' %>"
+      />
+    </div>
+
+    <!-- Message -->
+    <div class="form__field">
+      <label for="message">Message (optional)</label>
+      <span class="hint">Add any notes or special requests (max 500 characters).</span>
+      <textarea
+        id="message"
+        name="message"
+        maxlength="500"
+      ><%= (testdriveData && testdriveData.message) || "" %></textarea>
+    </div>
+
+    <button type="submit" class="button button--primary">
+      Submit Test Drive Request
+    </button>
+  </form>
+
+  <p class="testdrive-request__back">
+    <a href="/inv/detail/<%= vehicle ? vehicle.inv_id : '' %>" class="button button--secondary">
+      ← Back to Vehicle
+    </a>
+  </p>
+
+  <script>
+    // Simple client-side validation (in addition to HTML5 + server validation)
+    const form = document.getElementById("testdriveForm");
+    if (form) {
+      form.addEventListener("submit", (event) => {
+        const date = form.preferred_date.value.trim();
+        const time = form.preferred_time.value.trim();
+        const phone = form.contact_phone.value.trim();
+
+        if (!date || !time || !phone) {
+          alert("Preferred date, time, and phone are required.");
+          event.preventDefault();
+        }
+      });
+    }
+  </script>
+</section>

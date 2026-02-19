@@ -1,5 +1,7 @@
 // utilities/index.js
 import inventoryModel from "../models/inventory-model.js";
+export { testdriveRules, checkTestdriveData } from "./testdrive-validation.js";
+
 /**
  * Wrap async controllers so errors go to next()
  * instead of crashing the app.
