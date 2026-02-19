@@ -13,6 +13,7 @@ import cookieParser from "cookie-parser";
 import authMiddleware from "./utilities/auth-middleware.js";
 import accountRouter from "./routes/accountRoute.js";
 import testdriveRouter from "./routes/testdriveRoute.js";
+import utilities from "./utilities/index.js";
 
 dotenv.config();
 
@@ -55,6 +56,23 @@ app.use(cookieParser());
 
 // Attaching account data (from JWT) to res.locals
 app.use(authMiddleware.attachAccountData);
+
+// Attaching account data (from JWT) to res.locals
+app.use(authMiddleware.attachAccountData);
+
+// Load classifications for the nav on every request
+app.use(async (req, res, next) => {
+  try {
+    const classifications = await utilities.getAllClassifications();
+    res.locals.navClassifications = classifications;
+    return next();
+  } catch (err) {
+    console.error("[NAV] Failed to load classifications:", err);
+    res.locals.navClassifications = [];
+    return next();
+  }
+});
+
 
 // Static files
 app.use(express.static(path.join(__dirname, "public")));

@@ -92,6 +92,9 @@ function buildVehicleDetailGrid(vehicle) {
   `;
 }
 
+/**
+ * Build <select> options for the Add Vehicle form.
+ */
 async function buildClassificationList(selectedId = null) {
   const classifications = await inventoryModel.getClassifications();
 
@@ -110,10 +113,19 @@ async function buildClassificationList(selectedId = null) {
   `;
 }
 
+/**
+ * Get all classifications (for navigation, etc.)
+ * Re-uses the same model method as buildClassificationList.
+ */
+async function getAllClassifications() {
+  return await inventoryModel.getClassifications();
+}
+
 const utilities = {
   handleErrors,
   buildVehicleDetailGrid,
   buildClassificationList,
+  getAllClassifications,
 };
 
 export default utilities;

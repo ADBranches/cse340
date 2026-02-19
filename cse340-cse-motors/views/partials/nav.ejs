@@ -2,9 +2,14 @@
   <ul class="nav-list">
     <li><a href="/">Home</a></li>
 
-    <li><a href="/inv/type/1">Custom</a></li>
-    <li><a href="/inv/type/5">Sedan</a></li> 
-    <li><a href="/inv/type/3">SUV</a></li>    
-    <li><a href="/inv/type/4">Truck</a></li>  
+    <% if (navClassifications && navClassifications.length) { %>
+      <% navClassifications.forEach(function (c) { %>
+        <li>
+          <a href="/inv/type/<%= c.classification_id %>">
+            <%= c.classification_name %>
+          </a>
+        </li>
+      <% }); %>
+    <% } %>
   </ul>
 </nav>
